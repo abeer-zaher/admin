@@ -134,16 +134,7 @@
 								</div>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end">
-								<a class="dropdown-item" href="javascript:;"><i
-										class="bx bx-user"></i><span>Profile</span></a>
-								<a class="dropdown-item" href="javascript:;"><i
-										class="bx bx-cog"></i><span>Settings</span></a>
-								<a class="dropdown-item" href="javascript:;"><i
-										class="bx bx-tachometer"></i><span>Dashboard</span></a>
-								<a class="dropdown-item" href="javascript:;"><i
-										class="bx bx-wallet"></i><span>Earnings</span></a>
-								<a class="dropdown-item" href="javascript:;"><i
-										class="bx bx-cloud-download"></i><span>Downloads</span></a>
+
 								<div class="dropdown-divider mb-0"></div>	<a class="dropdown-item" href="javascript:;"><i
 										class="bx bx-power-off"></i><span>Logout</span></a>
 							</div>
