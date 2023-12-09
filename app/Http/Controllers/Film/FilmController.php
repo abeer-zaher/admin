@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Film;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Film;
 
-class AdminController extends Controller
+class FilmController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-         return view('component.spinners');
+
+      /*  $films = Film::all();
+
+        return view('films.index',compact('films'));*/
+        return view('component.acordians');
     }
 
     /**
@@ -24,7 +29,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('component.acordians');
     }
 
     /**
@@ -35,6 +40,45 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'name'=>'required',
+            'description'=>'required',
+            'dateshow'=>'required',
+            'director'=>'required',
+            'prodcompany'=>'required',
+            'cast'=>'required',
+            'photo'=>'required|image',
+           // 'geners'=>'required'
+
+            ]);
+           /* if(validate){
+                error_log('hit me');
+            }*/
+
+            $photo = $request->photo;
+            $newPhoto = time().$photo->getClientOriginalName();
+            $photo->move('images/',$newPhoto);
+
+            $film = Film::create([
+
+                'name'=>$request->name,
+                'description'=>$request->description,
+                'dateshow'=>$request->dateshow,
+                'director'=>$request->director,
+                'prodcompany'=>$request->prodcompany,
+                'cast'=>$request->cast,
+                'photo'=>'images/'.$newPhoto
+
+             ]);
+
+
+             //$film->geners()->attach($request->geners);
+
+             return redirect()->back()->withSuccess('تمت الإضافة');
+
+
+
 
     }
 

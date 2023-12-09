@@ -13,7 +13,7 @@
                             <ol class="breadcrumb mb-0 p-0">
                                 <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
                                 </li>
-                                <li class="breadcrumb-item active" aria-current="page">Accordions</li>
+                                <li class="breadcrumb-item active" aria-current="page">Add film</li>
                             </ol>
                         </nav>
                     </div>
@@ -33,16 +33,47 @@
                 <!--end breadcrumb-->
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Accordion Example</h5>
+                        <h3 class="card-title">Add film</h3>
                         <hr/>
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Accordion Item #1
-                          </button>
-                        </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <form action="{{route('films.store')}}" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="_token" value="{{ csrf_token()}}"/>
+                            <div class="form-group">
+
+                            <lable>Film name</lable>
+                            <input type="text" class="form-control" name="name" required>
+
+                            <lable>Description</lable>
+                            <textarea type="text" class="form-control" name="description" required>
+                            </textarea>
+
+                            <lable>Date show</lable>
+                            <input type="text" class="form-control" name="dateshow" required>
+
+                            <lable>director</lable>
+                            <input type="text" class="form-control" name="director" required>
+
+                            <lable>prod-company</lable>
+                            <input type="text" class="form-control" name="prodcompany" required>
+
+                            <lable>cast</lable>
+                            <textarea type="text" class="form-control" name="cast" required>
+                            </textarea>
+
+                            <lable>Photo</lable>
+                            <input type="file" class="form-control" name="photo" required>
+
+
+
+
+                            <button type="submit" class="btn btn-primary">Add film</button>
+
+                            </form>
+
+
+
+
+
+                             <!--   <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">	<strong>This is the first item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.</div>
                                 </div>
                             </div>
@@ -106,7 +137,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
         <!--end page-content-wrapper-->
