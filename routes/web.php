@@ -1,8 +1,10 @@
 <?php
 
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Film\FilmController;
+use App\Http\Controllers\Gener\GenerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,17 +12,84 @@ use App\Http\Controllers\Film\FilmController;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
-Route::get('/',[AdminController::class,'index'] );
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::controller(FilmController::class)->group(function(){
-    Route::get('/film','index')->name('films');
-    Route::get('/film/create', 'create')->name('films.create');
-    Route::post('/film/store', 'store')->name('films.store');
-    Route::get('/film/destroy/{id}', 'destroy')->name('films.destroy');
+Auth::routes();
 
+
+
+Route::get('/adminlockscreen', function () {
+    return view('admin.auth.admin-lock-screen');
+})->name('admin.lock');
+
+Route::get('/', function () {
+    return redirect('/admin');
+})->middleware(['auth', 'verified']);
+
+//Route for Film
+
+Route::group(['prefix' => 'admin'], function () {
+
+   // Route::group(['middleware'=>['auth', 'role:admin']], function () {
+
+    Route::controller(FilmController::class)->group(function(){
+
+    Route::get('/', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
+    Route::get('/film','index')
+    ->name('admin.film.index');
+
+    Route::get('/film/create', 'create')
+    ->name('admin.film.create');
+
+    Route::post('/film/store','store')
+    ->name('admin.film.store');
+
+    Route::get('/film/edit/{id}','edit')
+    ->name('admin.film.edit');
+
+    Route::patch('/film/update/{id}','update')
+    ->name('admin.film.update');
 });
+});
+//});
+
+//Route for Gener
+
+Route::group(['prefix' => 'admin'], function () {
+
+    Route::controller(GenerController::class)->group(function(){
+
+    Route::get('/', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
+    Route::get('/gener','index')
+    ->name('admin.gener.index');
+
+    Route::get('/gener/create', 'create')
+    ->name('admin.gener.create');
+
+    Route::post('/gener/store','store')
+    ->name('admin.gener.store');
+
+    Route::get('/gener/edit/{id}','edit')
+    ->name('admin.gener.edit');
+
+    Route::patch('/gener/update/{id}','update')
+    ->name('admin.gener.update');
+});
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -18,4 +18,7 @@ class Film extends Model
         'cast',
         'photo'
     ];
+    public function geners(){
+        return $this->belongsToMany('App\Models\Gener');
+     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Film;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Film;
+use App\Models\Gener;
 
 class FilmController extends Controller
 {
@@ -17,10 +18,11 @@ class FilmController extends Controller
     {
 
       /*  $films = Film::all();
-
         return view('films.index',compact('films'));*/
-        return view('component.acordians');
-    }
+        $geners = Gener::all();
+        $films = Film::all();
+        return view('admin.film.film_index',compact('geners','films'));
+     }
 
     /**
      * Show the form for creating a new resource.
@@ -29,7 +31,8 @@ class FilmController extends Controller
      */
     public function create()
     {
-        return view('component.acordians');
+        $geners = Gener::all();
+        return view('admin.film.film_create',compact('geners'));
     }
 
     /**
@@ -49,12 +52,10 @@ class FilmController extends Controller
             'prodcompany'=>'required',
             'cast'=>'required',
             'photo'=>'required|image',
-           // 'geners'=>'required'
+            'geners'=>'required'
 
             ]);
-           /* if(validate){
-                error_log('hit me');
-            }*/
+
 
             $photo = $request->photo;
             $newPhoto = time().$photo->getClientOriginalName();
@@ -73,7 +74,7 @@ class FilmController extends Controller
              ]);
 
 
-             //$film->geners()->attach($request->geners);
+             $film->geners()->attach($request->geners);
 
              return redirect()->back()->withSuccess('تمت الإضافة');
 
@@ -88,9 +89,10 @@ class FilmController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+
+
     }
 
     /**
@@ -101,7 +103,9 @@ class FilmController extends Controller
      */
     public function edit($id)
     {
-        //
+        $film = Film::find($id);
+
+        return view('admin.film.film_edit',compact('film'));
     }
 
     /**
@@ -113,7 +117,32 @@ class FilmController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $film = Film::find($id);
+        $request->validate([
+            'name'=>'required',
+            'description'=>'required',
+            'dateshow'=>'required',
+            'director'=>'required',
+            'prodcompany'=>'required',
+            'cast'=>'required'
+            ]);
+
+            if($request->has('photo')){
+                $photo = $request->photo;
+                $newPhoto = time().$photo->getClientOriginalName();
+                $photo->move('uploads/posts',$newPhoto);
+                $film->photo = 'uploads/posts'.$newPhoto;
+
+            }
+
+            $film->name = $request->name;
+            $film->description = $request->description;
+            $film->dateshow = $request->dateshow;
+            $film->director = $request->director;
+            $film->prodcompany = $request->prodcompany;
+            $film->cast = $request->cast;
+            $film->save();
+            return redirect()->back();
     }
 
     /**
