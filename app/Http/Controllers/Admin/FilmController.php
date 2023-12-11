@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Film;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -104,8 +104,9 @@ class FilmController extends Controller
     public function edit($id)
     {
         $film = Film::find($id);
+        $geners = Gener::all();
 
-        return view('admin.film.film_edit',compact('film'));
+        return view('admin.film.film_edit',compact('film','geners'));
     }
 
     /**

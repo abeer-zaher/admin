@@ -54,6 +54,9 @@
                                 </div>
 
                                 <hr>
+                                <div class="mt-2">
+                                    @include('admin.layouts.partials.messages')
+                                </div>
                                 <form action="{{route('admin.gener.store')}}" method="POST" class="row g-3"
                                     enctype="multipart/form-data">
                                     @csrf

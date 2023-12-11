@@ -3,8 +3,9 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Film\FilmController;
-use App\Http\Controllers\Gener\GenerController;
+use App\Http\Controllers\Admin\FilmController;
+use App\Http\Controllers\Admin\GenerController;
+use Spatie\Permission\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,20 +31,26 @@ Route::get('/adminlockscreen', function () {
 })->name('admin.lock');
 
 Route::get('/', function () {
-    return redirect('/admin');
-})->middleware(['auth', 'verified']);
+    return view('admin.index');
+})->middleware(['auth'])->name('admin.index');
+
+
+
+
+/*
+Route::get('/', function () {
+    return view('admin.index');
+})->name('admin.index');*/
 
 //Route for Film
 
+Route::group(['middleware'=>['auth', 'role:admin']], function () {
+
+
 Route::group(['prefix' => 'admin'], function () {
 
-   // Route::group(['middleware'=>['auth', 'role:admin']], function () {
+Route::controller(FilmController::class)->group(function(){
 
-    Route::controller(FilmController::class)->group(function(){
-
-    Route::get('/', function () {
-        return view('admin.index');
-    })->name('admin.index');
 
     Route::get('/film','index')
     ->name('admin.film.index');
@@ -59,19 +66,10 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::patch('/film/update/{id}','update')
     ->name('admin.film.update');
+
 });
-});
-//});
 
-//Route for Gener
-
-Route::group(['prefix' => 'admin'], function () {
-
-    Route::controller(GenerController::class)->group(function(){
-
-    Route::get('/', function () {
-        return view('admin.index');
-    })->name('admin.index');
+Route::controller(GenerController::class)->group(function(){
 
     Route::get('/gener','index')
     ->name('admin.gener.index');
@@ -88,7 +86,12 @@ Route::group(['prefix' => 'admin'], function () {
     Route::patch('/gener/update/{id}','update')
     ->name('admin.gener.update');
 });
+
 });
+});
+
+
+
 
 Auth::routes();
 

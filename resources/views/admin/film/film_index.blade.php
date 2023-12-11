@@ -51,6 +51,8 @@
                             <th>director</th>
                             <th>prodcompany</th>
                             <th>cast</th>
+                            <th>photo</th>
+                            <th>gener</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -74,7 +76,7 @@
                                   <td style="max-width: 50px">
                                     <p> {{ $film->prodcompany }} </p>
                                 </td>
-                                <td style="max-width: 50px">
+                                <td style="max-width: 200px">
                                     <p> {{ $film->cast }} </p>
                                 </td>
 
@@ -94,6 +96,13 @@
                                             <span class="close">&times;</span>
                                         </div>
                                     </div>
+                                </td>
+
+                                <td style="max-width: 100px">
+                                    <p>
+                                        {{$film->geners}}
+                                    </p>
+
                                 </td>
 
 
@@ -122,6 +131,8 @@
                             <th>director</th>
                             <th>prodcompany</th>
                             <th>cast</th>
+                            <th>photo</th>
+                            <th>gener</th>
                         </tr>
                     </tfoot>
                 </table>

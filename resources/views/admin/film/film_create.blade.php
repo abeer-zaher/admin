@@ -53,6 +53,9 @@
                                 </div>
 
                                 <hr>
+                                <div class="mt-2">
+                                    @include('admin.layouts.partials.messages')
+                                </div>
                                 <form action="{{route('admin.film.store')}}" method="POST" class="row g-3"
                                     enctype="multipart/form-data">
                                     @csrf
@@ -88,9 +91,9 @@
                                         <label for="dateshow" class="form-label labels"><strong>Date show</strong>
                                             <span class="text-danger"> *</span>
                                         </label>
-                                        <input type="text" id="dateshow" name="dateshow" class="form-control"
+                                        <input type="date" id="dateshow" name="dateshow" class="form-control"
                                         value="{{ old('dateshow') }}">
-                                        @if ($errors->has('Date show'))
+                                        @if ($errors->has('dateshow'))
                                             <span class="text-danger text-left">{{ $errors->first('dateshow') }}</span>
                                         @endif
                                     </div>
@@ -103,7 +106,7 @@
                                         </label>
                                         <input type="text" id="director" name="director" class="form-control"
                                         value="{{ old('director') }}">
-                                        @if ($errors->has('Director'))
+                                        @if ($errors->has('director'))
                                             <span class="text-danger text-left">{{ $errors->first('director') }}</span>
                                         @endif
                                     </div>
@@ -128,24 +131,24 @@
                                         <label for="cast" class="form-label labels"><strong>Cast</strong>
                                             <span class="text-danger"> *</span>
                                         </label>
-                                        <input type="text" id="cast" name="cast" class="form-control"
-                                        value="{{ old('cast') }}">
-                                        @if ($errors->has('Prodcompany'))
-                                            <span class="text-danger text-left">{{ $errors->first('prodcompany') }}</span>
+                                         <textarea class="form-control" name="cast" id="cast" placeholder="...cast" rows="3">{{ old('cast') }}</textarea>
+
+                                        @if ($errors->has('cast'))
+                                            <span class="text-danger text-left">{{ $errors->first('cast') }}</span>
                                         @endif
                                     </div>
 
                                     {{--ADD Gener of film--}}
 
                                     <div class="col-md-6">
-                                       {{-- <label for="cast" class="form-label labels"><strong>Gener</strong>
+                                         <label for="gener" class="form-label labels"><strong>Gener</strong>
                                             <span class="text-danger"> *</span>
                                         </label>
                                         <br>
-                                        @foreach ($geners as $item)
-                                         {{--<input type="checkbox" id="gener" name="gener[]" class="form-control"
-                                        value="{{ $item->id }}">--}}
-                                       {{-- <input type="checkbox" name="geners[]" value="{{$item->gener_id}}">
+                                        {{--@foreach ($geners as $item)
+                                         <input type="checkbox" id="gener" name="gener[]" class="form-control"
+                                        value="{{ $item->id }}">
+                                         <input type="checkbox" name="geners[]" value="{{$item->gener_id}}">
 
                                         <label class="form-lable">{{$item->name}}</label>
                                         @endforeach

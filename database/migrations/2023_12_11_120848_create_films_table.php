@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
-            $table->string('dateshow');
+            $table->date('dateshow');
             $table->string('director');
             $table->string('prodcompany');
             $table->longtext('cast');

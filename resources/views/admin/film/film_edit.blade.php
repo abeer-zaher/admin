@@ -45,7 +45,7 @@
                                 {{-- Product Image --}}
                                 <div class="card-group radius-15">
                                     <div class="card">
-                                        <img id="image" src="{{ url('$film->photo') }}" class="d-block w-100"
+                                        <img id="image" src="{{ url('images/'.$film->photo) }}" class="d-block w-100"
                                             alt="...">
                                         <div class="card-body">
                                             <div class="image-upload">
@@ -68,7 +68,7 @@
                                         {{-- Film Name --}}
                                         <li class="list-group-item row d-flex">
                                             <div class="col-lg-6">
-                                                <label for="name" class="form-label labels"><strong>اسم التصنيف</strong>
+                                                <label for="name" class="form-label labels"><strong>Film name</strong>
                                                     <span class="text-danger"> *</span>
                                                 </label>
                                                 <input type="text" id="name" name="name" class="form-control"
@@ -83,7 +83,7 @@
                                         {{-- Film Description --}}
                                         <li class="list-group-item">
                                             <div class="col-12">
-                                                <label for="description" class="form-label labels"><strong>وصف التصنيف</strong>
+                                                <label for="description" class="form-label labels"><strong>Description</strong>
                                                     <span class="text-danger"> *</span>
                                                 </label>
                                                 <textarea class="form-control" name="description" id="description" placeholder="وصف التصنيف..." rows="3">{{$film->description}}</textarea>
@@ -154,6 +154,28 @@
                                                 @endif
                                             </div>
                                         </li>
+
+                                        {{--Gener of film--}}
+                                        <li class="list-group-item row d-flex">
+                                            <div class="col-lg-6">
+                                                <label for="gener" class="form-label labels"><strong>Gener</strong>
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                <input type="text" id="cast" name="cast" class="form-control"
+                                                    value="{{$film->cast}}">
+
+                                        <div>
+                                            <label for="formGroupExampleInput" class="form-label">Gener</label> <br>
+                                               @foreach($geners as $item)
+                                               <input type="checkbox" name="geners[]" value="{{$item->id}}">
+                                            <label for="formGroupExampleInput" >{{$item->name}}</label>
+                                                  @endforeach
+                                             </div>
+
+
+                                            </div>
+                                        </li>
+
 
 
                                     </ul>
