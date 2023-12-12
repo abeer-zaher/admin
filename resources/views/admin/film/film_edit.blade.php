@@ -31,9 +31,9 @@
         <div class="page-content-wrapper">
             <div class="page-content">
 
-                {{-- <div class="mt-2">
+                  <div class="mt-2">
                     @include('admin.layouts.partials.messages')
-                </div> --}}
+                </div>
                 <form method="POST" action="{{route('admin.film.update',['id'=>$film->id])}}"
                     enctype="multipart/form-data">
                     @csrf
@@ -168,6 +168,7 @@
                                             <label for="formGroupExampleInput" class="form-label">Gener</label> <br>
                                                @foreach($geners as $item)
                                                <input type="checkbox" name="geners[]" value="{{$item->id}}">
+
                                             <label for="formGroupExampleInput" >{{$item->name}}</label>
                                                   @endforeach
                                              </div>

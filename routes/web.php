@@ -52,10 +52,10 @@ Route::group(['prefix' => 'admin'], function () {
 Route::controller(FilmController::class)->group(function(){
 
 
-    Route::get('/film','index')
+    Route::get('/film','get_films')
     ->name('admin.film.index');
 
-    Route::get('/film/create', 'create')
+    Route::get('/film/create', 'create_film')
     ->name('admin.film.create');
 
     Route::post('/film/store','store')
