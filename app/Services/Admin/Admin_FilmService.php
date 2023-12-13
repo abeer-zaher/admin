@@ -2,10 +2,13 @@
 
 namespace App\Services\Admin;
 
+
 use App\Models\Film;
 use App\Models\Gener;
 
 class Admin_FilmService {
+
+
 
     private function validate_create_input($input_data){
 
@@ -69,15 +72,16 @@ class Admin_FilmService {
         return $result;
     }
 
-    public function store_film($input_data){
+    public function store_film($input_data,$path){
 
         $result = [];
         $data = [];
 
-        if(!$this->validate_create_input($input_data) !='success'){
+        if($this->validate_create_input($input_data) !='success'){
               $code = 400;
               $msg = $this->validate_create_input($input_data);
         }else {
+
             $film = Film::create([
                 'name'=>$input_data['name'],
                 'description'=>$input_data['description'],
@@ -85,10 +89,16 @@ class Admin_FilmService {
                 'director'=>$input_data['director'],
                 'prodcompany'=>$input_data['prodcompany'],
                 'cast'=>$input_data['cast'],
+                'photo'=>$path,
 
 
             ]);
+
+
+
+
             $film->geners()->attach($input_data['geners']);
+
             $code = 200;
             $msg = 'created';
             $data = $input_data;
@@ -107,6 +117,7 @@ class Admin_FilmService {
     public function update_film($input_data,$id){
 
         $result = [];
+        $msg = 'fail';
 
         $data = [] ;
 
@@ -159,11 +170,16 @@ class Admin_FilmService {
         }
         else $film->cast = $input_data['cast'];
 
+        if(isset($input_data['geners'])){
+            $film->geners()->sync($geners);
+        }
+
+
 
         $film->save();
 
         $code = 200;
-        $msg = 'update';
+        $msg = 'updated';
         $data = $input_data;
 
         $result =[
@@ -177,7 +193,30 @@ class Admin_FilmService {
 
     }
 
+    public function destroy_film($id){
+    $result = [];
+    $data = [] ;
 
+
+
+     $film = Film::find($id);
+     $geners = $film->geners;
+     $film->geners()->detach($geners);
+     $film->delete();
+
+     $code = 200;
+     $msg = 'deleted';
+     $data = [];
+
+     $result = [
+        'code' => $code,
+        'msg' => $msg,
+        'data' => $data,
+
+    ];
+    return $result;
+
+}
 
 
     public function get_driver_profile(Driver $driver)

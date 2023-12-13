@@ -86,7 +86,7 @@
                                                 <label for="description" class="form-label labels"><strong>Description</strong>
                                                     <span class="text-danger"> *</span>
                                                 </label>
-                                                <textarea class="form-control" name="description" id="description" placeholder="وصف التصنيف..." rows="3">{{$film->description}}</textarea>
+                                                <textarea class="form-control" name="description" id="description" placeholder="description.." rows="3">{{$film->description}}</textarea>
 
                                                 @if ($errors->has('description'))
                                                     <span
@@ -146,8 +146,8 @@
                                                 <label for="cast" class="form-label labels"><strong>Cast</strong>
                                                     <span class="text-danger"> *</span>
                                                 </label>
-                                                <input type="text" id="cast" name="cast" class="form-control"
-                                                    value="{{$film->cast}}">
+                                                <textarea class="form-control" name="cast" id="cast" placeholder="cast" rows="3">{{$film->cast}}</textarea>
+
 
                                                 @if ($errors->has('cast'))
                                                     <span class="text-danger text-left">{{ $errors->first('cast') }}</span>
@@ -167,7 +167,8 @@
                                         <div>
                                             <label for="formGroupExampleInput" class="form-label">Gener</label> <br>
                                                @foreach($geners as $item)
-                                               <input type="checkbox" name="geners[]" value="{{$item->id}}">
+
+                                               <input type="checkbox" name="geners[]" value="{{$item->id}}" >
 
                                             <label for="formGroupExampleInput" >{{$item->name}}</label>
                                                   @endforeach

@@ -16,7 +16,7 @@ class MediaService
         $filename = pathinfo($file, PATHINFO_FILENAME);
         $extension = pathinfo($file, PATHINFO_EXTENSION);
 
-        $rand_str = time() . '-' . str_random(4) . random_int(1000, 9999) . str_random(3);
+        $rand_str = time() . '-'  . random_int(1000, 9999)  ;
 
         // $image_name =  time() . '-' . str_random(5) . random_int(1000, 9999) . preg_replace("/[^a-z0-9\_\-]/i", '', $filename) . '.' . $extension;
         $image_name =  $rand_str . '.' . $extension;
@@ -31,6 +31,7 @@ class MediaService
         }
 
         $image = Image::make($image);
+        error_log($image_path);
 
         // $img->resize($img->width() * ($resize_percent / 100), $img->height() * ($resize_percent / 100));
 
@@ -38,7 +39,7 @@ class MediaService
             $image = $this->resize_image($image, $required_size);
         }
 
-        $image->save($image_path);
+        //$image->save($image_path);
 
         return $image_path;
     }

@@ -145,16 +145,6 @@
                                             <span class="text-danger"> *</span>
                                         </label>
                                         <br>
-                                        {{--@foreach ($geners as $item)
-                                         <input type="checkbox" id="gener" name="gener[]" class="form-control"
-                                        value="{{ $item->id }}">
-                                         <input type="checkbox" name="geners[]" value="{{$item->gener_id}}">
-
-                                        <label class="form-lable">{{$item->name}}</label>
-                                        @endforeach
-                                        @if ($errors->has('Gener'))
-                                            <span class="text-danger text-left">{{ $errors->first('gener') }}</span>
-                                        @endif--}}
 
                                         <div>
                                         <label for="formGroupExampleInput" class="form-label">Gener</label> <br>
@@ -174,7 +164,7 @@
                                         </label>
                                         <br>
                                         <input type='file' id="photo" name="photo"
-                                            accept=".jpg, .png, image/jpeg, image/png" onchange="readURL(this);" required />
+                                            accept=".jpg, .png, image/jpeg, image/png" onchange="readURL(this);" />
                                         <img class="img-preview" id="image_preview1" src="image"
                                             alt="choose image" />
 

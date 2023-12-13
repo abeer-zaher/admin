@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('film_gener', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('film_id');
-            $table->integer('gener_id');
+            $table->integer('film_id')->cascadeOnDelete();
+            $table->integer('gener_id')->cascadeOnDelete();
             $table->timestamps();
         });
     }

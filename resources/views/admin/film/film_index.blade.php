@@ -97,22 +97,32 @@
                                         </div>
                                     </div>
                                 </td>
+                                @php
+                                       $genres = $film->geners;
+                                       $str = '';
+                                         foreach ($geners as $gener){
+                                          $str = ('-'. $gener->name);
+                                         }
 
-                                <td style="max-width: 100px">
-                                    <p>
-                                        {{$film->geners}}
-                                    </p>
+                                        @endphp
+                                        <td>{{$str}}</td>
 
-                                </td>
 
 
                                 <td style="max-width: 30px">
 
                                     <div class="d-flex" style="flex-wrap: wrap">
+                                        <div>
 
                                         <a href="{{ route('admin.film.edit', $film->id) }}">
                                             <i class="fa-solid fa-2x fa-pen-to-square"></i>
                                         </a>
+
+
+                                        <a href="{{ route('admin.film.destroy', $film->id) }}">
+                                            <i class="fa-solid fa-2x fa-pen-to-square"></i>
+                                        </a>
+                                        </div>
 
                                     </div>
                                 </td>

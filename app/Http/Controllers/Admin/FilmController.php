@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Admin\Admin_FilmService;
+use App\Services\Common\MediaService;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\FilmCreateRequest;
 use App\Models\Film;
@@ -21,13 +22,13 @@ class FilmController extends Controller
     {
 
         // $filter = $request->filter;
-
+        $geners = Gener::all();
         $response = $this->film_service->get_films($request->all());
 
         $response_data = $response['data'];
         if ($response['code'] == 200) {
             $films = $response['data'];
-            return view('admin.film.film_index', compact('films'));
+            return view('admin.film.film_index', compact('films','geners'));
         }
 
         # redirect to error page
@@ -39,8 +40,11 @@ public function create_film(){
 public function store(Request $request){
 
    // $request->validate();
-    $response = $this->film_service->store_film($request->all());
+    $path = (New MediaService)->save_image($request->photo,'images/');
+     //error_log($path);
+    $response = $this->film_service->store_film($request->all(),$path);
     $response_data = $response['data'];
+    error_log($response['code']);
     if($response['code'] == 200)
 {
       return redirect()->back()->withSuccess($response['msg']);
@@ -61,6 +65,13 @@ public function update(Request $request,$id){
     $response_data = $response['data'];
     return redirect()->back()->withSuccess($response['msg']);
 
+}
+
+public function destroy($id){
+    $response = $this->film_service->destroy_film($id);
+    $response_data = $response['data'];
+    return view('admin.film.film_index')->withSuccess($response['$msg']);
+    //return redirect()->back()->withSuccess($response['msg']);
 
 }
 

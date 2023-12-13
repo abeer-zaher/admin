@@ -66,6 +66,8 @@ Route::controller(FilmController::class)->group(function(){
 
     Route::patch('/film/update/{id}','update')
     ->name('admin.film.update');
+    Route::get('/film/destroy/{id}','destroy')
+    ->name('admin.film.destroy');
 
 });
 
