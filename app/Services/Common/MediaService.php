@@ -39,7 +39,7 @@ class MediaService
             $image = $this->resize_image($image, $required_size);
         }
 
-        //$image->save($image_path);
+        $image->save($image_path);
 
         return $image_path;
     }

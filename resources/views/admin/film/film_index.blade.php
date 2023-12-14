@@ -120,7 +120,7 @@
 
 
                                         <a href="{{ route('admin.film.destroy', $film->id) }}">
-                                            <i class="fa-solid fa-2x fa-pen-to-square"></i>
+                                            <i class="fas fa-2x fa-trash-alt"></i>
                                         </a>
                                         </div>
 

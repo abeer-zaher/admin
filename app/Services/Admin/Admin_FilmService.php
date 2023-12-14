@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin;
 
-
+use App\Services\Common\MediaService;
 use App\Models\Film;
 use App\Models\Gener;
 
@@ -72,7 +72,7 @@ class Admin_FilmService {
         return $result;
     }
 
-    public function store_film($input_data,$path){
+    public function store_film($input_data){
 
         $result = [];
         $data = [];
@@ -81,7 +81,7 @@ class Admin_FilmService {
               $code = 400;
               $msg = $this->validate_create_input($input_data);
         }else {
-
+            $path = (New MediaService)->save_image($input_data['photo'],'images/');
             $film = Film::create([
                 'name'=>$input_data['name'],
                 'description'=>$input_data['description'],
@@ -90,7 +90,6 @@ class Admin_FilmService {
                 'prodcompany'=>$input_data['prodcompany'],
                 'cast'=>$input_data['cast'],
                 'photo'=>$path,
-
 
             ]);
 
@@ -118,69 +117,100 @@ class Admin_FilmService {
 
         $result = [];
         $msg = 'fail';
-
         $data = [] ;
 
         $film = Film::find($id);
+        if($film != null){
+
+        $name = '';
+        $description ='';
+        $dateshow= '';
+        $director= '';
+        $prodcompany='';
+        $cast='';
+        $photo = '';
+
+
+
 
         if(!isset($input_data['name'])){
 
-             $film->name = $film->name;
+             $name = $film->name;
 
         }
-        else $film->name = $input_data['name'];
+        else $name = $input_data['name'];
 
         if(!isset($input_data['description'])){
 
-             $film->description = $film->description;
+             $description = $film->description;
 
         }
-        else   $film->description = $input_data['description'];
+        else   $description = $input_data['description'];
 
 
 
         if(!isset($input_data['dateshow'])){
 
-            $film->dateshow = $film->dateshow;
+            $dateshow = $film->dateshow;
 
         }
-        else  $film->dateshow = $input_data['dateshow'];
+        else  $dateshow = $input_data['dateshow'];
 
 
         if(!isset($input_data['director'])){
 
-             $film->director = $film->director;
+             $director = $film->director;
 
         }
-        else $film->director = $input_data['director'];
+        else $director = $input_data['director'];
 
 
         if(!isset($input_data['prodcompany'])){
 
-            $film->prodcompany = $film->prodcompany;
+            $prodcompany = $film->prodcompany;
 
         }
-        else $film->prodcompany = $input_data['prodcompany'];
+        else $prodcompany = $input_data['prodcompany'];
 
 
         if(!isset($input_data['cast'])){
 
-            $film->cast = $film->cast;
+            $cast = $film->cast;
 
         }
-        else $film->cast = $input_data['cast'];
+        else $cast = $input_data['cast'];
 
         if(isset($input_data['geners'])){
+            $geners = $input_data['geners'];
             $film->geners()->sync($geners);
         }
 
+        if(!isset($input_data['photo'])){
 
+           $photo = $film->photo ;
+        }else {
+            $path = (New MediaService)->save_image($input_data['photo'],'images/');
+            $photo = $path;
+        }
+
+        $film->name = $name ;
+        $film->description = $description ;
+        $film->dateshow = $dateshow ;
+        $film->director = $director ;
+        $film->prodcompany = $prodcompany ;
+        $film->cast = $cast ;
+        $film->photo = $photo;
 
         $film->save();
 
         $code = 200;
         $msg = 'updated';
         $data = $input_data;
+     }
+     else {
+        $code = 400;
+        $msg = 'film is not exist';
+        }
 
         $result =[
             'code' => $code,
@@ -197,9 +227,8 @@ class Admin_FilmService {
     $result = [];
     $data = [] ;
 
-
-
      $film = Film::find($id);
+     if($film != null){
      $geners = $film->geners;
      $film->geners()->detach($geners);
      $film->delete();
@@ -207,6 +236,12 @@ class Admin_FilmService {
      $code = 200;
      $msg = 'deleted';
      $data = [];
+    }
+     else {
+        $code = 400;
+        $msg = 'film is not exist';
+
+     }
 
      $result = [
         'code' => $code,

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Admin\Admin_FilmService;
-use App\Services\Common\MediaService;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\FilmCreateRequest;
 use App\Models\Film;
@@ -40,9 +40,8 @@ public function create_film(){
 public function store(Request $request){
 
    // $request->validate();
-    $path = (New MediaService)->save_image($request->photo,'images/');
-     //error_log($path);
-    $response = $this->film_service->store_film($request->all(),$path);
+
+    $response = $this->film_service->store_film($request->all());
     $response_data = $response['data'];
     error_log($response['code']);
     if($response['code'] == 200)

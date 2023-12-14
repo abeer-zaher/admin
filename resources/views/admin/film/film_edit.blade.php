@@ -45,7 +45,7 @@
                                 {{-- Product Image --}}
                                 <div class="card-group radius-15">
                                     <div class="card">
-                                        <img id="image" src="{{ url('images/'.$film->photo) }}" class="d-block w-100"
+                                        <img id="photo" src="{{ url('images/'.$film->photo) }}" class="d-block w-100"
                                             alt="...">
                                         <div class="card-body">
                                             <div class="image-upload">
@@ -53,7 +53,7 @@
                                                     <i class="attach-doc fa fa-cloud-upload fa-2x" aria-hidden="true"></i>
                                                 </label>
 
-                                                <input name="image" class="form-control" id="input_image" type="file"
+                                                <input name="photo" class="form-control" id="input_image" type="file"
                                                     onchange="replaceImg(this, 'photo');" />
                                             </div>
                                         </div>
@@ -161,8 +161,15 @@
                                                 <label for="gener" class="form-label labels"><strong>Gener</strong>
                                                     <span class="text-danger"> *</span>
                                                 </label>
+                                                @php
+                                                 $genres = $film->geners;
+                                                 $str = '';
+                                                 foreach ($geners as $gener){
+                                                 $str = ('-'. $gener->name);
+                                                   }
+                                                @endphp
                                                 <input type="text" id="cast" name="cast" class="form-control"
-                                                    value="{{$film->cast}}">
+                                                    value={{$str}}>
 
                                         <div>
                                             <label for="formGroupExampleInput" class="form-label">Gener</label> <br>
