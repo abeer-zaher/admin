@@ -34,6 +34,8 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::get('/film','api_get_films')->name('api.get.films');
     Route::post('/film/store','api_store')->name('api.films.store');
+    Route::post('/film/update','api_update')->name('api.films.update');
+    Route::post('/film/destroy','api_destroy')->name('api.films.destroy');
 
 });
 });

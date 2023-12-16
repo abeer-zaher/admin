@@ -16,6 +16,7 @@ use App\Models\Gener;
 
 class API_FilmController extends Controller
 {
+    protected Admin_FilmService $film_service;
 
     public function __construct(Admin_FilmService $film_service) {
         $this->film_service = $film_service;
@@ -46,6 +47,27 @@ class API_FilmController extends Controller
       }else
       return $this->sendResponse( [] , $response['msg'],$response['code']);
     }
+
+    public function api_update(Request $request,$id){
+
+        $response = $this->film_service->update_film($request->all(),$id);
+        $response_data = $response['data'];
+        if($responce['code'] == 200){
+            return $this->sendResponse( filmResource::collection($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+    }
+
+    public function api_destroy($id){
+        $response = $this->film_service->destroy_film($id);
+        $response_data = $response['data'];
+        if($responce['code'] == 200){
+            return $this->sendResponse( [] , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+
+    }
+
 
 
 

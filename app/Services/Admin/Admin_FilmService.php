@@ -76,6 +76,8 @@ class Admin_FilmService {
 
         $result = [];
         $data = [];
+        $msg = '';
+        $code = 0;
 
         if($this->validate_create_input($input_data) !='success'){
               $code = 400;
@@ -116,101 +118,54 @@ class Admin_FilmService {
     public function update_film($input_data,$id){
 
         $result = [];
-        $msg = 'fail';
+        $msg = '';
+        $code = 0;
         $data = [] ;
 
         $film = Film::find($id);
-        if($film != null){
-
-        $name = '';
-        $description ='';
-        $dateshow= '';
-        $director= '';
-        $prodcompany='';
-        $cast='';
-        $photo = '';
-
-
-
-
-        if(!isset($input_data['name'])){
-
-             $name = $film->name;
-
-        }
-        else $name = $input_data['name'];
-
-        if(!isset($input_data['description'])){
-
-             $description = $film->description;
-
-        }
-        else   $description = $input_data['description'];
-
-
-
-        if(!isset($input_data['dateshow'])){
-
-            $dateshow = $film->dateshow;
-
-        }
-        else  $dateshow = $input_data['dateshow'];
-
-
-        if(!isset($input_data['director'])){
-
-             $director = $film->director;
-
-        }
-        else $director = $input_data['director'];
-
-
-        if(!isset($input_data['prodcompany'])){
-
-            $prodcompany = $film->prodcompany;
-
-        }
-        else $prodcompany = $input_data['prodcompany'];
-
-
-        if(!isset($input_data['cast'])){
-
-            $cast = $film->cast;
-
-        }
-        else $cast = $input_data['cast'];
-
-        if(isset($input_data['geners'])){
-            $geners = $input_data['geners'];
-            $film->geners()->sync($geners);
-        }
-
-        if(!isset($input_data['photo'])){
-
-           $photo = $film->photo ;
+        if(is_null($film)){
+            $code = 400;
+            $msg = 'film not found';
         }else {
-            $path = (New MediaService)->save_image($input_data['photo'],'images/');
-            $photo = $path;
-        }
+            $name = isset($input_data['name']) ? $input_data['name'] : $film->name;
 
-        $film->name = $name ;
-        $film->description = $description ;
-        $film->dateshow = $dateshow ;
-        $film->director = $director ;
-        $film->prodcompany = $prodcompany ;
-        $film->cast = $cast ;
-        $film->photo = $photo;
+            $description = isset($input_data['description']) ? $input_data['description'] : $film->description;
 
-        $film->save();
+            $dateshow = isset($input_data['dateshow']) ? $input_data['dateshow'] : $film->dateshow;
+
+            $director = isset($input_data['director']) ? $input_data['director'] : $film->director;
+
+            $prodcompany = isset($input_data['prodcompany']) ? $input_data['prodcompany'] : $film->prodcompany;
+
+            $cast = isset($input_data['cast']) ? $input_data['cast'] : $film->cast;
+
+            $photo_path = $film->photo;
+            if(isset($input_data['photo'])){
+                File::delete($photo_path);
+                $photo_path = (new MediaService)->save_image($input_data['photo'], 'images/');
+            }
+
+            $geners = $film->geners;
+            if(isset($input_data['geners'])){
+                $geners = $input_data['geners'];
+                $film->geners()->sync($geners);
+            }
+
+        $film->update([
+            'name' => $name,
+            'description' => $description,
+            'dateshow' => $dateshow,
+            'director'=> $director,
+            'prodcompany' => $prodcompany,
+            'cast' => $cast,
+            'photo' => $photo_path,
+        ]);
 
         $code = 200;
         $msg = 'updated';
-        $data = $input_data;
-     }
-     else {
-        $code = 400;
-        $msg = 'film is not exist';
-        }
+        $data = $film;
+
+    }
 
         $result =[
             'code' => $code,
@@ -225,22 +180,22 @@ class Admin_FilmService {
 
     public function destroy_film($id){
     $result = [];
+    $code = 0;
+    $msg = '';
     $data = [] ;
 
      $film = Film::find($id);
-     if($film != null){
-     $geners = $film->geners;
-     $film->geners()->detach($geners);
-     $film->delete();
-
-     $code = 200;
-     $msg = 'deleted';
-     $data = [];
-    }
-     else {
+     if(is_null($film)){
         $code = 400;
         $msg = 'film is not exist';
+     }else{
+      $geners = $film->geners;
+      $film->geners()->detach($geners);
+      $film->delete();
 
+       $code = 200;
+       $msg = 'film deleted';
+       $data = [];
      }
 
      $result = [

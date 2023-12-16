@@ -31,9 +31,9 @@
         <div class="page-content-wrapper">
             <div class="page-content">
 
-                {{-- <div class="mt-2">
+               <div class="mt-2">
                     @include('admin.layouts.partials.messages')
-                </div> --}}
+                </div>
                 <form method="POST" action="{{route('admin.gener.update',['id'=>$gener->id])}}"
                     enctype="multipart/form-data">
                     @csrf

@@ -7,7 +7,7 @@ use App\Http\Controllers\API\API_BaseController as API_BaseController;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Services\Admin\API\API_AuthService;
 use App\Http\Resource\Userdata as userDataResource;
-use App\Http\Resource\Userlogin as userLoginResource;
+//use App\Http\Resource\Userlogin as userLoginResource;
 use Illuminate\Http\Request;
 
 class API_AuthController extends API_BaseController
@@ -32,7 +32,7 @@ class API_AuthController extends API_BaseController
         $response = $this->auth_service->login_user($request->all());
         $response_data = $response['data'];
         if($response['code'] == 200){
-            return $this->sendResponse( userLoginResource::collection($response['data']), $response['msg'],$response['code']);
+            return $this->sendResponse( userDataResource::collection($response['data']), $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
 

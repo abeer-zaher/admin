@@ -165,10 +165,10 @@
                                                  $genres = $film->geners;
                                                  $str = '';
                                                  foreach ($geners as $gener){
-                                                 $str = ('-'. $gener->name);
+                                                 $str .= ('-'. $gener->name);
                                                    }
                                                 @endphp
-                                                <input type="text" id="cast" name="cast" class="form-control"
+                                                <input type="text" id="gener" name="gener" class="form-control"
                                                     value={{$str}}>
 
                                         <div>
@@ -177,7 +177,8 @@
 
                                                <input type="checkbox" name="geners[]" value="{{$item->id}}" >
 
-                                            <label for="formGroupExampleInput" >{{$item->name}}</label>
+                                               <label for="formGroupExampleInput" >{{$item->name}}</label>
+                                               <br>
                                                   @endforeach
                                              </div>
 

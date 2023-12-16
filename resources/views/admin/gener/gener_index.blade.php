@@ -8,11 +8,11 @@
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
 
         <div>
-        <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.create')}}">
-            {{ __('إضافة فيلم') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
-        </a>
+       {{-- <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.create')}}">
+            {{ __('Add film') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
+        </a>--}}
         <a role="button" type="button" class="btn btn-info" href="{{route('admin.gener.create')}}">
-            {{ __('إضافة نوع') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
+            {{ __('Add gener') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
         </a>
         </div>
 
@@ -23,15 +23,15 @@
         <div class="card-body">
 
             <div class="card-title">
-                <h4 class="mb-0">{{ __('التصنيفات') }}</h4>
+                <h4 class="mb-0">{{ __('Categories') }}</h4>
             </div>
             <hr />
 
             <div class="card-title">
                 <div>
-                    <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.index')}}">
+                    {{--<a role="button" type="button" class="btn btn-info" href="{{route('admin.film.index')}}">
                         {{ __('All films') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
-                    </a>
+                    </a>--}}
 
                     <a role="button" type="button" class="btn btn-info" href="{{route('admin.gener.index')}}">
                         {{ __('All geners') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
@@ -67,6 +67,9 @@
 
                                         <a href="{{ route('admin.gener.edit', $gener->id) }}">
                                             <i class="fa-solid fa-2x fa-pen-to-square"></i>
+                                        </a>
+                                        <a href="{{ route('admin.gener.destroy', $gener->id) }}">
+                                            <i class="fas fa-2x fa-trash-alt"></i>
                                         </a>
 
                                     </div>

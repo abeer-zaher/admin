@@ -122,7 +122,16 @@
                     <a href="{{ route('admin.film.index') }}">
                         <div class="parent-icon icon-color-10"><i class="fa-solid fa-folder-tree"></i>
                         </div>
-                        <div class="menu-title">{{ __('التصنيفات') }}</div>
+                        <div class="menu-title">{{ __('Films') }}</div>
+                    </a>
+                </li>
+
+                {{-- Geners --}}
+                <li>
+                    <a href="{{ route('admin.gener.index') }}">
+                        <div class="parent-icon icon-color-10"><i class="fa-solid fa-folder-tree"></i>
+                        </div>
+                        <div class="menu-title">{{ __('Geners') }}</div>
                     </a>
                 </li>
 
@@ -186,7 +195,7 @@
                                 data-bs-toggle="dropdown">
                                 <div class="d-flex user-box align-items-center">
                                     <div class="user-info">
-                                        <p class="user-name mb-0">UserName</p>
+                                        <p class="user-name mb-0">{{Auth::user()->name}}</p>
                                         {{-- <p class="designattion mb-0">Available</p> --}}
                                     </div>
                                     {{-- <img src="" class="user-img" alt="user avatar"> --}}

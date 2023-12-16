@@ -73,7 +73,7 @@ Route::controller(FilmController::class)->group(function(){
 
 Route::controller(GenerController::class)->group(function(){
 
-    Route::get('/gener','index')
+    Route::get('/gener','get_gener')
     ->name('admin.gener.index');
 
     Route::get('/gener/create', 'create')
@@ -87,6 +87,9 @@ Route::controller(GenerController::class)->group(function(){
 
     Route::patch('/gener/update/{id}','update')
     ->name('admin.gener.update');
+
+    Route::get('/gener/destroy/{id}','destroy')
+    ->name('admin.gener.destroy');
 });
 
 });

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\Admin\Admin_FilmService;
-
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\FilmCreateRequest;
 use App\Models\Film;
@@ -62,15 +61,20 @@ public function update(Request $request,$id){
 
     $response = $this->film_service->update_film($request->all(),$id);
     $response_data = $response['data'];
+    if($responce['code'] == 200){
     return redirect()->back()->withSuccess($response['msg']);
-
+    }else
+    return  redirect()->back()->withErrors($response['msg']);
 }
 
 public function destroy($id){
     $response = $this->film_service->destroy_film($id);
     $response_data = $response['data'];
-    return view('admin.film.film_index')->withSuccess($response['$msg']);
-    //return redirect()->back()->withSuccess($response['msg']);
+    if($responce['code'] == 200){
+     return redirect()->route('admin.film.index')->withSuccess($response['msg']);
+    }else
+    return redirect()->route('admin.film.index')->withErrors($response['msg']);
+
 
 }
 

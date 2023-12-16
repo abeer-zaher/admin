@@ -16,7 +16,7 @@ class Film extends JsonResource
     {
 
             return [
-                'id'=>$this->_id,
+                'film_id'=>$this->_id,
                 'name'=>$this->name,
                 'description'=>$this->description,
                 'dateshow'=>$this->dateshow,
@@ -24,8 +24,7 @@ class Film extends JsonResource
                 'prodcompany'=>$this->prodcompany,
                 'cast'=>$this->cast,
                 'photo'=>$this->photo,
-                'created_at'=>$this->created_at->format('d/m/y'),
-                'updeted_at'=>$this->updeted_at,
+
             ];
 
     }

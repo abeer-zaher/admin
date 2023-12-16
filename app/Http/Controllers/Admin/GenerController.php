@@ -3,106 +3,84 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\Admin\Admin_GenerService;
+use App\Http\Requests\Admin\GenerCreateRequest;
 use Illuminate\Http\Request;
 use App\Models\Gener;
 use App\Models\Film;
 
 class GenerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $geners = Gener::all();
-        return view('admin.gener.gener_index',compact('geners'));
+    protected Admin_GenerService $gener_service;
+
+    public function __construct(Admin_GenerService $gener_service) {
+        $this->gener_service = $gener_service;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function get_gener(Request $request)
+    {
+
+        $response = $this->gener_service->get_geners($request->all());
+
+        $response_data = $response['data'];
+        if ($response['code'] == 200) {
+            $geners = $response['data'];
+            return view('admin.gener.gener_index', compact('geners'));
+        }
+
+
+    }
+
+
+
     public function create()
     {
 
         return view('admin.gener.gener_create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name'=>'required',
+      //  $request->validate();
+      $response = $this->gener_service->store_gener($request->all());
+      $response_data = $response['data'];
 
-            ]);
-            $gener = Gener::create([
-                'name'=> $request->name,
-            ]);
+      if($response['code'] == 200)
+  {
+        return redirect()->back()->withSuccess($response['msg']);
 
-            return redirect()->back()->withSuccess('تمت الإضافة بنجاح');
+  }
+  return  redirect()->back()->withErrors($response['msg']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
 
         $gener = Gener::find($id);
 
         return view('admin.gener.gener_edit',compact('gener'));
+
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $gener = Gener::find($id);
-        $request->validate([
-            'name'=>'required',
-        ]);
-        $gener->name = $request->name;
-        $gener->save();
-        return redirect()->back();
+        $response = $this->gener_service->update_gener($request->all(),$id);
+        $response_data = $response['data'];
+     return redirect()->back()->withSuccess($response['msg']);
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
-        $gener = Gener::find($id);
-        $gener->delete();
-        return redirect()->back();
+        $response = $this->gener_service->destroy_gener($id);
+        $response_data = $response['data'];
+
+         return redirect()->route('admin.gener.index')->withSuccess($response['msg']);
     }
 }

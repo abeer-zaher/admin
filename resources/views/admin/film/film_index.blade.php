@@ -9,11 +9,11 @@
 
         <div>
         <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.create')}}">
-            {{ __('إضافة فيلم') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
+            {{ __('Add film') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
         </a>
-        <a role="button" type="button" class="btn btn-info" href="{{route('admin.gener.create')}}">
-            {{ __('إضافة نوع') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
-        </a>
+       {{-- <a role="button" type="button" class="btn btn-info" href="{{route('admin.gener.create')}}">
+            {{ __('Add gener') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
+        </a>--}}
         </div>
 
     </div>
@@ -23,7 +23,7 @@
         <div class="card-body">
 
             <div class="card-title">
-                <h4 class="mb-0">{{ __('التصنيفات') }}</h4>
+                <h4 class="mb-0">{{ __('Categories') }}</h4>
             </div>
             <hr />
 
@@ -33,9 +33,9 @@
                         {{ __('All films') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
                     </a>
 
-                    <a role="button" type="button" class="btn btn-info" href="{{route('admin.gener.index')}}">
+                   {{-- <a role="button" type="button" class="btn btn-info" href="{{route('admin.gener.index')}}">
                         {{ __('All geners') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
-                    </a>
+                    </a>--}}
                 </div>
             </div>
 
@@ -101,7 +101,7 @@
                                        $genres = $film->geners;
                                        $str = '';
                                          foreach ($geners as $gener){
-                                          $str = ('-'. $gener->name);
+                                          $str .= ('-'. $gener->name);
                                          }
 
                                         @endphp
