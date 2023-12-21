@@ -72,7 +72,7 @@
                                             <div class="image-upload">
                                                 <label for="input_image">
                                                    {{-- <i class="attach-doc fa fa-cloud-upload fa-2x" aria-hidden="true"></i> --}}
-                                                   <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.edit_img ',['id'=>$film->id])}}">
+                                                   <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.edit_img',['id'=>$film->id])}}">
                                                         {{ __('change images') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
                                                     </a>
                                                 </label>
