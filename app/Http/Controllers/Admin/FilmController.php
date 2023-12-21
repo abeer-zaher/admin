@@ -137,6 +137,47 @@ public function update_img(Request $request,$id){
     }else
     return  redirect()->back()->withErrors($response['msg']);
 }
+public function show(){
+    $films = Film::all();
+     return view('admin.film.film_show',compact('films'));
 
+}
+public function addToCart($id){
+    $film = Film::find($id);
+    $cart = session()->get('cart',[]);
+    if(isset($cart[$id])){
+        $cart[$id]['quantity']++;
+    }else{
+        $cart[$id]=[
+            "film_name" => $film->name,
+            "photo" => $film->photo,
+            "price" => $film->price,
+            'quantity' => 1
+        ];
+    }
+    session()->put('cart',$cart);
+    return redirect()->back()->with('success','film add to cart successfuly');
+}
 
+public function cart(){
+    return view ('admin.film.cart');
+}
+public function removefromcart(Request $request){
+    if($request->id){
+        $cart = session()->get('cart');
+        if(isset($cart[$request->id])){
+            unset($cart[$request->id]);
+            session()->put('cart',$cart);
+        }
+        session()->flash('success','Film successfuly removed');
+    }
+}
+public function updatecart(Request $request){
+    if($request->id $$ $request->quantity){
+        $cart = session()->get('cart');
+        $cart[$request->id]["quantity"] = $request->quantity;
+        session()->put('cart',$cart);
+        session()->flash('success','Cart successfuly updated');
+    }
+}
 }

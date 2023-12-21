@@ -55,6 +55,20 @@ Route::controller(FilmController::class)->group(function(){
     Route::get('/film','get_films')
     ->name('admin.film.index');
 
+    Route::get('/film/show','show')
+    ->name('admin.film.show');
+
+    Route::get('/film/addtocart/{id}','addToCart')
+    ->name('admin.film.add_to_cart');
+
+    Route::get('/film/cart','cart')
+    ->name('admin.film.cart');
+
+    Route::get('/film/removefromcart','removefromcart')
+    ->name('admin.film.remove');
+    Route::get('/film/updatecart','updatecart')
+    ->name('admin.film.update_cart');
+
     Route::get('/film/search','searchbyname')
     ->name('admin.film.search');
 
