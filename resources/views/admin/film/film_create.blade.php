@@ -73,7 +73,7 @@
                                         @endif
                                     </div>
 
-                                    {{-- Category Description --}}
+                                    {{-- Film Description --}}
                                     <div class="col-12">
                                         <label for="description" class="form-label labels"><strong>Description</strong>
                                             <span class="text-danger"> *</span>
@@ -138,6 +138,19 @@
                                         @endif
                                     </div>
 
+                                    {{-- Film price--}}
+
+                                                    <div class="col-md-6">
+                                                        <label for="cast" class="form-label labels"><strong>Price</strong>
+                                                            <span class="text-danger"> *</span>
+                                                        </label>
+                                                        <textarea class="form-control" name="price" id="price" placeholder="...price" rows="3">{{ old('price') }}</textarea>
+
+                                                        @if ($errors->has('price'))
+                                                        <span class="text-danger text-left">{{ $errors->first('price') }}</span>
+                                                        @endif
+                                                    </div>
+
                                     {{--ADD Gener of film--}}
 
                                     <div class="col-md-6">
@@ -151,6 +164,7 @@
                                            @foreach($geners as $item)
                                            <input type="checkbox" name="geners[]" value="{{$item->id}}">
                                         <label for="formGroupExampleInput" >{{$item->name}}</label>
+                                        <br>
                                               @endforeach
                                          </div>
                                     </div>

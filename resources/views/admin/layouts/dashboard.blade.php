@@ -118,6 +118,7 @@
 
 
                 {{-- Films --}}
+
                 <li>
                     <a href="{{ route('admin.film.index') }}">
                         <div class="parent-icon icon-color-10"><i class="fa-solid fa-folder-tree"></i>

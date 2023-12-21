@@ -19,6 +19,7 @@
     </div>
     <!--end breadcrumb-->
 
+
     <div class="card">
         <div class="card-body">
 
@@ -36,7 +37,22 @@
                    {{-- <a role="button" type="button" class="btn btn-info" href="{{route('admin.gener.index')}}">
                         {{ __('All geners') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
                     </a>--}}
-                </div>
+                    </div>
+                    <br>
+
+                    <div class="col-md-6">
+
+
+                    <div class="form-group">
+                        <form action="{{route('admin.film.search')}}" method="GET">
+                            <input class="form-control" name="search" placeholder="search...">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+
+                    </div>
+                    </div>
+
+
             </div>
 
             <hr>
@@ -51,6 +67,7 @@
                             <th>director</th>
                             <th>prodcompany</th>
                             <th>cast</th>
+                            <th>price</th>
                             <th>photo</th>
                             <th>gener</th>
                         </tr>
@@ -79,14 +96,28 @@
                                 <td style="max-width: 200px">
                                     <p> {{ $film->cast }} </p>
                                 </td>
+                                <td style="max-width: 200px">
+                                    <p> {{ $film->price }} </p>
+                                </td>
 
 
                                 <td style="max-width: 150px">
                                     <div class="gallery">
 
                                         <a href="{{ url($film->photo) }}">
+
                                             <img src="{{ url($film->photo) }}" class="user-img td-img">
                                         </a>
+
+
+                                        @foreach ($film->images as $img)
+
+
+                                        <a href="{{ url($img->path) }}">
+
+                                            <img src="{{ url($img->path) }}" class="user-img td-img">
+                                        </a>
+                                         @endforeach
 
                                     </div>
 
@@ -98,10 +129,10 @@
                                     </div>
                                 </td>
                                 @php
-                                       $genres = $film->geners;
+
                                        $str = '';
-                                         foreach ($geners as $gener){
-                                          $str .= ('-'. $gener->name);
+                                         foreach ($film->geners as $gener){
+                                          $str = ('-'. $gener->name);
                                          }
 
                                         @endphp
@@ -122,6 +153,12 @@
                                         <a href="{{ route('admin.film.destroy', $film->id) }}">
                                             <i class="fas fa-2x fa-trash-alt"></i>
                                         </a>
+                                        {{-- add more images --}}
+
+                                          <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.addimages',['id'=>$film->id])}}">
+                                            {{ __('Add images') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
+                                           </a>
+
                                         </div>
 
                                     </div>
@@ -141,6 +178,7 @@
                             <th>director</th>
                             <th>prodcompany</th>
                             <th>cast</th>
+                            <th>price</th>
                             <th>photo</th>
                             <th>gener</th>
                         </tr>

@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Services\Common\MediaService;
 use App\Models\Film;
 use App\Models\Gener;
+use App\Models\Image;
 
 class Admin_FilmService {
 
@@ -54,7 +55,7 @@ class Admin_FilmService {
         if (isset($input_data['data'])) {
             $films = Film::where('dateshow','<',$input_data['data'])->get();
         } else {
-            $films = Film::all();
+            $films = Film::all() ;
         }
 
 
@@ -70,6 +71,36 @@ class Admin_FilmService {
         ];
 
         return $result;
+    }
+
+    public function searchbyname($searchquery){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+
+        $films = Film::whereHas('geners',function($query) use ($searchquery){
+            $query->where('name','like',"%$searchquery%");
+        })
+        ->get();
+
+
+        if(is_null($films)){
+            $code = 400;
+            $msg = 'no film';
+        }else {
+            $code = 200;
+            $msg = 'films';
+           $data = $films;
+        }
+        $result = [
+            'data'  =>  $data,
+            'code'  =>  $code,
+            'msg'   =>  $msg,
+        ];
+        return $result;
+
     }
 
     public function store_film($input_data){
@@ -91,12 +122,10 @@ class Admin_FilmService {
                 'director'=>$input_data['director'],
                 'prodcompany'=>$input_data['prodcompany'],
                 'cast'=>$input_data['cast'],
+                'price' =>$input_data['price'],
                 'photo'=>$path,
 
             ]);
-
-
-
 
             $film->geners()->attach($input_data['geners']);
 
@@ -115,6 +144,78 @@ class Admin_FilmService {
 
 
     }
+    public function store_film_img($input_data,$id){
+        $result = [];
+        $msg = '';
+        $code = 0;
+        $data = [] ;
+
+         $film = Film::find($id);
+
+        if(is_null($film)){
+            $code = 400;
+            $msg = 'film not found';
+        }else {
+            $files = $input_data['image'];
+            foreach($files as $file){
+                $image = (New MediaService)->save_image($file,'images/');
+                 $film->images()->create([
+                    'film_id' =>$film->id,
+                    'path' =>$image,
+                ]);
+            }
+
+            $code = 200;
+            $msg = 'add image';
+            $data = $input_data;
+        }
+         $result = [
+                'code' => $code,
+                'msg' => $msg,
+                'data' => $data,
+            ];
+            return $result;
+
+    }
+    public function update_film_imgs($input_data,$id){
+        $result = [];
+        $msg = '';
+        $code = 0;
+        $data = [] ;
+
+        $film = Film::find($id);
+
+        if(is_null($film)){
+            $code = 400;
+            $msg = 'film not found';
+        }else {
+
+             $img_path = $film->images;
+
+            if(isset($input_data['images'])){
+                $img_path = $input_data['images'];
+                $film->images()->update([
+                    'path' =>$img_path,
+                ]);
+            }
+             $code = 200;
+        $msg = 'updated';
+        $data = $film;
+
+    }
+
+        $result =[
+            'code' => $code,
+            'msg'  => $msg,
+            'data'  => $data,
+
+        ];
+        return $result;
+
+        }
+
+
+
     public function update_film($input_data,$id){
 
         $result = [];
@@ -139,6 +240,8 @@ class Admin_FilmService {
 
             $cast = isset($input_data['cast']) ? $input_data['cast'] : $film->cast;
 
+            $price = isset($input_data['price']) ? $input_data['price'] : $film->price;
+
             $photo_path = $film->photo;
             if(isset($input_data['photo'])){
                 File::delete($photo_path);
@@ -158,6 +261,7 @@ class Admin_FilmService {
             'director'=> $director,
             'prodcompany' => $prodcompany,
             'cast' => $cast,
+            'price' =>$price,
             'photo' => $photo_path,
         ]);
 

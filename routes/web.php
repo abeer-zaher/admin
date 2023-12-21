@@ -55,6 +55,9 @@ Route::controller(FilmController::class)->group(function(){
     Route::get('/film','get_films')
     ->name('admin.film.index');
 
+    Route::get('/film/search','searchbyname')
+    ->name('admin.film.search');
+
     Route::get('/film/create', 'create_film')
     ->name('admin.film.create');
 
@@ -66,8 +69,22 @@ Route::controller(FilmController::class)->group(function(){
 
     Route::patch('/film/update/{id}','update')
     ->name('admin.film.update');
+
     Route::get('/film/destroy/{id}','destroy')
     ->name('admin.film.destroy');
+
+    Route::get('/film/addimages/{id}','add_images')
+    ->name('admin.film.addimages');
+
+    Route::post('/film/store_imgs/{id}','store_imgs')
+    ->name('admin.film.store_imgs');
+
+
+    Route::get('/film/editimg/{id}','edit_img')
+    ->name('admin.film.edit_img');
+
+    Route::patch('/film/updateimage/{id}','update_img')
+    ->name('admin.film.update_img');
 
 });
 

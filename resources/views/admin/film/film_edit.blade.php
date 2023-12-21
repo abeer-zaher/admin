@@ -42,19 +42,43 @@
                         <div class="row mt-5">
                             <div class="col-lg-6 col-xl-6">
 
-                                {{-- Product Image --}}
+                                {{-- Film Image --}}
                                 <div class="card-group radius-15">
                                     <div class="card">
-                                        <img id="photo" src="{{ url('images/'.$film->photo) }}" class="d-block w-100"
-                                            alt="...">
+                                        <label >Film poster</label>
+                                            <a href="{{ url($film->photo) }}">
+                                               <img src="{{ url($film->photo) }}" class="user-img td-img">
+                                                  </a>
+                                                  <div class="card-body">
+                                                    <div class="image-upload">
+                                                        <label for="input_image">
+                                                            <i class="attach-doc fa fa-cloud-upload fa-2x" aria-hidden="true"></i>
+                                                        </label>
+
+                                                        <input name="photo" class="form-control" id="input_image" type="file" onchange="replaceImg(this, 'photo');" />
+                                                    </div>
+                                                </div>
+
+                                                  <div>
+                                                    <label >Film images</label>
+                                                    <br>
+                                                    @foreach ($film->images as $img)
+                                                    <a href="{{ url($img->path) }}">
+                                                      <img src="{{ url($img->path) }}" class="user-img td-img">
+                                                    </a>
+                                                    @endforeach
+                                                  </div>
                                         <div class="card-body">
                                             <div class="image-upload">
                                                 <label for="input_image">
-                                                    <i class="attach-doc fa fa-cloud-upload fa-2x" aria-hidden="true"></i>
+                                                   {{-- <i class="attach-doc fa fa-cloud-upload fa-2x" aria-hidden="true"></i> --}}
+                                                   <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.edit_img ',['id'=>$film->id])}}">
+                                                        {{ __('change images') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
+                                                    </a>
                                                 </label>
 
-                                                <input name="photo" class="form-control" id="input_image" type="file"
-                                                    onchange="replaceImg(this, 'photo');" />
+                                                <input name="image[]" class="form-control" id="input_image" type="file"
+                                                    onchange="replaceImg(this, 'image');" />
                                             </div>
                                         </div>
                                     </div>
@@ -155,6 +179,19 @@
                                             </div>
                                         </li>
 
+                                        {{-- Film price --}}
+                                        <li class="list-group-item row d-flex">
+                                            <div class="col-lg-6">
+                                                <label for="price" class="form-label labels"><strong>price</strong>
+                                                    <span class="text-danger"> *</span>
+                                                </label>
+                                                <input type="text" id="price" name="price" class="form-control" value="{{$film->price}}">
+                                                @if ($errors->has('price'))
+                                                <span class="text-danger text-left">{{ $errors->first('price') }}</span>
+                                                @endif
+                                            </div>
+                                        </li>
+
                                         {{--Gener of film--}}
                                         <li class="list-group-item row d-flex">
                                             <div class="col-lg-6">
@@ -162,10 +199,11 @@
                                                     <span class="text-danger"> *</span>
                                                 </label>
                                                 @php
-                                                 $genres = $film->geners;
+
+
                                                  $str = '';
-                                                 foreach ($geners as $gener){
-                                                 $str .= ('-'. $gener->name);
+                                                 foreach ($film->geners as $gener){
+                                                 $str = ('-'. $gener->name);
                                                    }
                                                 @endphp
                                                 <input type="text" id="gener" name="gener" class="form-control"
