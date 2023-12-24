@@ -80,7 +80,8 @@ class Admin_FilmService {
         $data = [];
 
 
-        $films = Film::whereHas('geners',function($query) use ($searchquery){
+        $films = Film::where('name','like',"%$searchquery%")
+        ->orwhereHas('geners',function($query) use ($searchquery){
             $query->where('name','like',"%$searchquery%");
         })
         ->get();

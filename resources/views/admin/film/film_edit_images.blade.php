@@ -75,12 +75,13 @@
                                     <img class="img-preview" id="image_preview1" src="image" alt="choose image" />
                                    <label>Film images</label>
                                     <br>
+                                    <div class="img_thumbnail">
                                     @foreach ($film->images as $img)
                                     <a href="{{ url($img->path) }}">
-                                        <img src="{{ url($img->path) }}" class="user-img td-img">
+                                        <img src="{{ url($img->path) }}"   >
                                     </a>
                                     @endforeach
-
+                                    </div>
 
 
                                     <div>
@@ -98,7 +99,7 @@
                                         <button class="btn btn-success" type="submit">{{ __('Add') }}</button>
                                     </div>
                                     <div class="col-md-2">
-                                        <a href="{{route('admin.film.index')}}" role="button" class="btn btn-warning">{{
+                                        <a href="{{route('admin.film.edit',['id' =>$film->id])}}" role="button" class="btn btn-warning">{{
                                             __('Cencel') }}</a>
                                     </div>
                                 </div>

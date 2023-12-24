@@ -127,7 +127,7 @@ return  redirect()->back()->withErrors($response['msg']);
 
 }
 
-public function edit_img(Request $request){
+public function edit_img(Request $request,$id){
 
  $film = Film::find($id);
      return view('admin.film.film_edit_images',compact('film'));

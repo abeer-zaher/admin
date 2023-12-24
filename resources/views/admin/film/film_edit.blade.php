@@ -46,9 +46,11 @@
                                 <div class="card-group radius-15">
                                     <div class="card">
                                         <label >Film poster</label>
+                                        <div class="img_thumbnail">
                                             <a href="{{ url($film->photo) }}">
-                                               <img src="{{ url($film->photo) }}" class="user-img td-img">
+                                               <img src="{{ url($film->photo) }}" >
                                                   </a>
+                                        </div>
                                                   <div class="card-body">
                                                     <div class="image-upload">
                                                         <label for="input_image">
@@ -62,11 +64,13 @@
                                                   <div>
                                                     <label >Film images</label>
                                                     <br>
+                                                    <div class="img_thumbnail">
                                                     @foreach ($film->images as $img)
                                                     <a href="{{ url($img->path) }}">
-                                                      <img src="{{ url($img->path) }}" class="user-img td-img">
+                                                      <img src="{{ url($img->path) }}" >
                                                     </a>
                                                     @endforeach
+                                                </div>
                                                   </div>
                                         <div class="card-body">
                                             <div class="image-upload">
@@ -210,7 +214,7 @@
                                                     value={{$str}}>
 
                                         <div>
-                                            <label for="formGroupExampleInput" class="form-label">Gener</label> <br>
+
                                                @foreach($geners as $item)
 
                                                <input type="checkbox" name="geners[]" value="{{$item->id}}" >
