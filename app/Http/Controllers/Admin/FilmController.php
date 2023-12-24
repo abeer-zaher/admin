@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\FilmCreateRequest;
 use App\Models\Film;
 use App\Models\Gener;
+use App\Models\Order;
+use Auth;
+
 
 class FilmController extends Controller
 {
@@ -76,6 +79,7 @@ return  redirect()->back()->withErrors($response['msg']);
 
 }
 
+
 public function edit($id){
     $film = Film::find($id);
     $geners = Gener::all();
@@ -85,7 +89,7 @@ public function update(Request $request,$id){
 
     $response = $this->film_service->update_film($request->all(),$id);
     $response_data = $response['data'];
-    if($responce['code'] == 200){
+    if($response['code'] == 200){
     return redirect()->back()->withSuccess($response['msg']);
     }else
     return  redirect()->back()->withErrors($response['msg']);
@@ -162,22 +166,56 @@ public function addToCart($id){
 public function cart(){
     return view ('admin.film.cart');
 }
-public function removefromcart(Request $request){
-    if($request->id){
+public function cart_remove($id){
+
         $cart = session()->get('cart');
-        if(isset($cart[$request->id])){
-            unset($cart[$request->id]);
-            session()->put('cart',$cart);
+        if(isset($cart[$id])){
+            unset($cart[$id]);
+           $cart = session()->put('cart',$cart);
         }
-        session()->flash('success','Film successfuly removed');
-    }
+       session()->flash('success','Film successfuly removed');
+        return view('admin.film.cart',compact('cart'));
+
+
 }
-public function updatecart(Request $request){
-    if($request->id $$ $request->quantity){
-        $cart = session()->get('cart');
-        $cart[$request->id]["quantity"] = $request->quantity;
-        session()->put('cart',$cart);
-        session()->flash('success','Cart successfuly updated');
+public function update_cart(Request $request){
+
+       /* $cart = session()->get('cart');
+        foreach (session('cart') as $id => $details){
+        $cart[$id]["quantity"] = $request->quantity;
+       $cart = session()->put('cart',$cart);
+        }
+        session()->flash('success','Cart successfuly updated');*/
+
+        return view('admin.film.cart',compact('cart'));
+
+}
+public function checkout(Request $request){
+    $films = Film::all();
+    $cart = session()->get('cart');
+    $total = 0;
+    foreach (session('cart') as $id => $details){
+    $total += $details['price'] * $details['quantity'];
     }
+
+   foreach (session('cart') as $id => $details){
+    $subtotal = 0;
+    $subtotal = $details['price'] * $details['quantity'];
+    $order = Order::create([
+    'user_id' => Auth::user()->id,
+    'product_name' => $details['film_name'],
+    'quentity' => $details['quantity'],
+    'price' => $details['price'],
+    'subtotal' => $subtotal ,
+    'total' => $total,
+   ]);
+
+ }
+ foreach (session('cart') as $id => $details){
+     unset($cart[$id]);
+     $cart = session()->put('cart',$cart);
+ }
+    return view('admin.film.film_show',compact('films','cart'));
+
 }
 }

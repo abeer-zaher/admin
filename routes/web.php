@@ -64,10 +64,14 @@ Route::controller(FilmController::class)->group(function(){
     Route::get('/film/cart','cart')
     ->name('admin.film.cart');
 
-    Route::get('/film/removefromcart','removefromcart')
+    Route::get('/film/remove/{id}','cart_remove')
     ->name('admin.film.remove');
-    Route::get('/film/updatecart','updatecart')
-    ->name('admin.film.update_cart');
+
+    Route::post('/film/updatecart','update_cart')
+    ->name('admin.film.updatecart');
+
+    Route::get('/film/checkout','checkout')
+    ->name('admin.film.cartcheckout');
 
     Route::get('/film/search','searchbyname')
     ->name('admin.film.search');

@@ -70,6 +70,7 @@
                             <th>price</th>
                             <th>photo</th>
                             <th>gener</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -137,25 +138,24 @@
 
                                         @endphp
                                         <td>{{$str}}</td>
+                                        <td>
+                                            <a role="button" href="{{ route('admin.film.edit', $film->id) }}" class="btn btn-success">Edit
 
+                                        </td>
 
-
-                                <td style="max-width: 30px">
-
-                                    <div class="d-flex" style="flex-wrap: wrap">
-                                        <div>
-
-                                        <a href="{{ route('admin.film.edit', $film->id) }}">
-                                            <i class="fa-solid fa-2x fa-pen-to-square"></i>
+                                <td >
+                                        <a role="button" href="{{ route('admin.film.destroy', $film->id) }}" class="btn btn-danger">
+                                             Delete
                                         </a>
 
+                                        </td>
+                                        <td>
 
-                                        <a href="{{ route('admin.film.destroy', $film->id) }}">
-                                            <i class="fas fa-2x fa-trash-alt"></i>
-                                        </a>
+                                        <div class="d-flex" style="flex-wrap: wrap">
+                                            <div>
                                         {{-- add more images --}}
 
-                                          <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.addimages',['id'=>$film->id])}}">
+                                         <a role="button" type="button" class="btn btn-info" href="{{route('admin.film.addimages',['id'=>$film->id])}}">
                                             {{ __('Add images') }} <span id="all_count_bedge" class="badge bg-light text-dark"></span>
                                            </a>
 
@@ -181,6 +181,7 @@
                             <th>price</th>
                             <th>photo</th>
                             <th>gener</th>
+                            <th>Action</th>
                         </tr>
                     </tfoot>
                 </table>

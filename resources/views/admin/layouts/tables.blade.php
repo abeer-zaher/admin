@@ -172,7 +172,35 @@
         function closeLightbox() {
             lightbox.style.display = 'none';
         }
+
     </script>
+    {{--<script>
+
+
+    $(document).ready(function(){
+    $('#remove').on('click', function(e){
+    console.log('10');
+    e.preventDefault();
+    var ele = $(this);
+
+    if(confirm("Do you really want to remove?")){
+    $.ajax({
+    url: "{{route('admin.film.remove')}}",
+    method: "GET",
+    data: {
+    _toke: '{{csrf_token()}}',
+    id: ele.parents("tr").attr("data-id")
+    },
+    success: function(responce){
+     window.location.reload();
+     console.log(20);
+    }
+    });
+    }
+    });
+    });
+
+</script>--}}
 
     @yield('script2')
 @endsection
