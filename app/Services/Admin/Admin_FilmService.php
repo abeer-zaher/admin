@@ -6,6 +6,8 @@ use App\Services\Common\MediaService;
 use App\Models\Film;
 use App\Models\Gener;
 use App\Models\Image;
+use App\Models\Cart;
+use App\Models\Filmcart;
 
 class Admin_FilmService {
 
@@ -16,7 +18,7 @@ class Admin_FilmService {
         $msg = 'success';
 
 
-        if(!isset($input_data['name'])){
+        if(!isset($input_data['product_name'])){
             $code =400;
             $msg = 'name is requird';
         }else if(!isset($input_data['description'])){
@@ -40,9 +42,6 @@ class Admin_FilmService {
         }
         return $msg;
 
-
-
-
     }
 
     public function get_films($input_data)
@@ -58,8 +57,6 @@ class Admin_FilmService {
             $films = Film::all() ;
         }
 
-
-
         $code = 200;
         $msg = 'Films';
         $data = $films;
@@ -71,6 +68,168 @@ class Admin_FilmService {
         ];
 
         return $result;
+    }
+
+    public function show_film($id){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+       // $carts = Cart::where('user_id','=',$id)->get();
+       $films = Film::all();
+
+         $code = 200;
+         $msg = 'films';
+         $data = $films;
+
+        $result = [
+            'data'  =>  $data,
+            'code'  =>  $code,
+            'msg'   =>  $msg,
+        ];
+
+        return $result;
+    }
+    public function validate_add_filmcart($input_data){
+         $msg = 'success';
+
+         if(!isset($input_data['product_name'])){
+            $code =400;
+            $msg = 'product name is requird';
+        }else if(!isset($input_data['quentity'])){
+            $code =400;
+            $msg = 'quentity is requird';
+        }else if(!isset($input_data['price'])){
+            $code =400;
+            $msg = 'price is requird';
+        }else if(!isset($input_data['cart_id'])){
+            $code = 400;
+            $msg = 'cart id is required';
+        }
+        return $msg;
+
+    }
+
+    public function add_to_filmcart($input_data,$id){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+        if($this->validate_add_filmcart($input_data) !='success'){
+              $code = 400;
+              $msg = $this->validate_add_filmcart($input_data);
+        }else {
+
+            $subtotal = $input_data['price'] * $input_data['quentity'];
+            $total +=$input_data['price'] * $input_data['quentity'];
+            $filmcart = Filmcart::create([
+                'product_name' => $input_data['product_name'],
+                'quentity' => $input_data['quentity'],
+                'price' => $input_data['price'],
+                'subtotal' => $subtotal ,
+                'cart_id' => $input_data['cart_id'],
+            ]);
+            $cart = Cart::find($id);
+            $filmcart->cart()->update([
+                'total' => $total,
+            ]);
+
+            $code = 200 ;
+            $msg = 'film cart add successuly';
+            $data = $filmcart;
+        }
+
+          $result = [
+            'data'  =>  $data,
+            'code'  =>  $code,
+            'msg'   =>  $msg,
+        ];
+
+        return $result;
+
+    }
+
+    public function delete_item($input_data){
+         $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+        $filmcart = Filmcart::where('product_name','like',$input_data['product_name'])->get();
+         if(is_null($filmcart)){
+        $code = 400;
+        $msg = 'film  cart is not exist';
+     }else{
+      $filmcart->delete();
+
+       $code = 200;
+       $msg = 'film deleted';
+       $data = [];
+     }
+
+     $result = [
+        'code' => $code,
+        'msg' => $msg,
+        'data' => $data,
+
+    ];
+    return $result;
+
+
+    }
+    public function checkout_cart($id){
+         $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+        $cart = Cart::find($id);
+
+        $cart->update([
+            'status' => 'inactive',
+        ]);
+         $code = 200;
+        $msg = 'updated';
+        $data = $cart;
+
+
+
+        $result =[
+            'code' => $code,
+            'msg'  => $msg,
+            'data'  => $data,
+
+        ];
+        return $result;
+    }
+
+    public function add_cart($id){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+        $cart = Cart::create([
+            'user_id'=>$id,
+            'total' => 0,
+            'status' => 'active',
+        ]);
+         $code = 200 ;
+        $msg =  'cart add successuly';
+         $data = $cart;
+
+
+         $result = [
+            'data'  =>  $data,
+            'code'  =>  $code,
+            'msg'   =>  $msg,
+        ];
+
+        return $result;
+
+
     }
 
     public function searchbyname($searchquery){

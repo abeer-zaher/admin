@@ -6,15 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\API_BaseController as API_BaseController;
 use App\Services\Admin\Admin_FilmService;
 use App\Http\Requests\Admin\FilmCreateRequest;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Film as filmResource;
+use App\Http\Resources\Cart as cartResource;
+use App\Http\Resources\Filmcart as filmcartResource;
 use Illuminate\Http\Request;
 use App\Models\Film;
 use App\Models\Gener;
+use App\Models\User;
 
 
 
-class API_FilmController extends Controller
+class API_FilmController extends API_BaseController
 {
     protected Admin_FilmService $film_service;
 
@@ -35,8 +38,56 @@ class API_FilmController extends Controller
 
     }
 
+    public function show_films($id){
+       // $id = Auth::User()->id;
+        $response = $this->film_service->show_film($id);
+        $response_data = $response['data'];
+        if ($response['code'] == 200) {
+            return $this->sendResponse( filmResource::collection($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+
+    }
+
+    public function add_to_filmcart(Request $request){
+         $response = $this->film_service->add_to_filmcart($request->all());
+        $response_data = $response['data'];
+         if ($response['code'] == 200) {
+            return $this->sendResponse( filmcartResource::collection($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
 
 
+    }
+    public function add_cart(Request $request,$id){
+         $response = $this->film_service->add_cart($request->all(),$id);
+        $response_data = $response['data'];
+        if ($response['code'] == 200) {
+            return $this->sendResponse( cartResource::collection($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+    }
+
+    public function delete_filmcart (Request $request){
+        $response = $this->film_service->delete_item($request->all());
+        $response_data = $response['data'];
+        if($responce['code'] == 200){
+            return $this->sendResponse( [] , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+
+
+    }
+
+    public function checkout($id){
+        $response = $this->film_service->checkout_cart($id);
+        $response_data = $response['data'];
+        if($responce['code'] == 200){
+            return $this->sendResponse( [] , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+
+    }
     public function api_store(Request $request)
     {
         //$request->validate();

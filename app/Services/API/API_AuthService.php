@@ -25,6 +25,7 @@ class API_AuthService {
 
     }
     private function validate_login($input_data){
+
         $msg = 'success validate';
         if(!isset($input_data['email'])){
             $code = 400;
@@ -39,7 +40,10 @@ class API_AuthService {
     public function register_user($input_data){
 
         $result = [];
+        $code = 0;
+        $msg = '';
         $data = [];
+
 
         if($this->validate_register($input_data) !='success register'){
             $code = 400;
@@ -68,10 +72,14 @@ class API_AuthService {
 
 
     }
+
     public function login_user($input_data){
         $result = [];
         $data = [];
-        if($this->validate_register($input_data) !='success validate'){
+        $code = 0;
+        $msg = '';
+
+        if($this->validate_login($input_data) !='success validate'){
             $code = 400;
             $msg = 'failed';
 
