@@ -19,6 +19,7 @@ class Film extends Model
         'cast',
         'price',
         'photo'
+
     ];
     public function geners(){
         return $this->belongsToMany(Gener::class);

@@ -38,9 +38,9 @@ class API_FilmController extends API_BaseController
 
     }
 
-    public function show_films($id){
+    public function show_films(){
        // $id = Auth::User()->id;
-        $response = $this->film_service->show_film($id);
+        $response = $this->film_service->show_film();
         $response_data = $response['data'];
         if ($response['code'] == 200) {
             return $this->sendResponse( filmResource::collection($response['data']) , $response['msg'],$response['code']);
@@ -48,22 +48,30 @@ class API_FilmController extends API_BaseController
         return $this->sendResponse( [] , $response['msg'],$response['code']);
 
     }
+    public function getcart($id){
+        $response = $this->film_service->get_cart($id);
+        $response_data = $response['data'];
+        if ($response['code'] == 200) {
+            return $this->sendResponse(new cartResource($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+    }
 
-    public function add_to_filmcart(Request $request){
-         $response = $this->film_service->add_to_filmcart($request->all());
+    public function add_to_filmcart(Request $request,$id){
+         $response = $this->film_service->add_to_filmcart($request->all(),$id);
         $response_data = $response['data'];
          if ($response['code'] == 200) {
-            return $this->sendResponse( filmcartResource::collection($response['data']) , $response['msg'],$response['code']);
+            return $this->sendResponse( new filmcartResource($response['data']) , $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
 
-
     }
-    public function add_cart(Request $request,$id){
-         $response = $this->film_service->add_cart($request->all(),$id);
+
+    public function add_cart($id){
+         $response = $this->film_service->add_cart($id);
         $response_data = $response['data'];
         if ($response['code'] == 200) {
-            return $this->sendResponse( cartResource::collection($response['data']) , $response['msg'],$response['code']);
+            return $this->sendResponse(new cartResource($response['data']) , $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
     }
@@ -71,8 +79,8 @@ class API_FilmController extends API_BaseController
     public function delete_filmcart (Request $request){
         $response = $this->film_service->delete_item($request->all());
         $response_data = $response['data'];
-        if($responce['code'] == 200){
-            return $this->sendResponse( [] , $response['msg'],$response['code']);
+        if($response['code'] == 200){
+            return $this->sendResponse([]  , $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
 
@@ -94,7 +102,7 @@ class API_FilmController extends API_BaseController
       $response = $this->film_service->store_film($request->all());
       $response_data = $response['data'];
       if($response['code'] == 200){
-        return $this->sendResponse( filmResource::collection($response['data']) , $response['msg'],$response['code']);
+        return $this->sendResponse(new filmResource($response['data']) , $response['msg'],$response['code']);
       }else
       return $this->sendResponse( [] , $response['msg'],$response['code']);
     }
@@ -104,7 +112,7 @@ class API_FilmController extends API_BaseController
         $response = $this->film_service->update_film($request->all(),$id);
         $response_data = $response['data'];
         if($responce['code'] == 200){
-            return $this->sendResponse( filmResource::collection($response['data']) , $response['msg'],$response['code']);
+            return $this->sendResponse(new filmResource($response['data']) , $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
     }

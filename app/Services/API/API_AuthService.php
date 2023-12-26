@@ -37,6 +37,7 @@ class API_AuthService {
         return $msg;
 
     }
+
     public function register_user($input_data){
 
         $result = [];

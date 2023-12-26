@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Services\Common\MediaService;
+use App\Models\User;
 use App\Models\Film;
 use App\Models\Gener;
 use App\Models\Image;
@@ -70,7 +71,7 @@ class Admin_FilmService {
         return $result;
     }
 
-    public function show_film($id){
+    public function show_film(){
         $result = [];
         $code = 0;
         $msg = '';
@@ -91,6 +92,7 @@ class Admin_FilmService {
 
         return $result;
     }
+
     public function validate_add_filmcart($input_data){
          $msg = 'success';
 
@@ -103,10 +105,10 @@ class Admin_FilmService {
         }else if(!isset($input_data['price'])){
             $code =400;
             $msg = 'price is requird';
-        }else if(!isset($input_data['cart_id'])){
+        }/*else if(!isset($input_data['cart_id'])){
             $code = 400;
             $msg = 'cart id is required';
-        }
+        }*/
         return $msg;
 
     }
@@ -116,6 +118,13 @@ class Admin_FilmService {
         $code = 0;
         $msg = '';
         $data = [];
+        $total = 0;
+        $subtotal = 0;
+        $fineltotal = 0;
+        $qety = 0;
+        $name = $input_data['product_name'];
+
+        $cart = Cart::find($id);
 
         if($this->validate_add_filmcart($input_data) !='success'){
               $code = 400;
@@ -124,23 +133,36 @@ class Admin_FilmService {
 
             $subtotal = $input_data['price'] * $input_data['quentity'];
             $total +=$input_data['price'] * $input_data['quentity'];
+
+            $filmcarts = $cart->film_cart()->where('product_name','like',"%$name%");
+            if(!is_null($filmcarts)){
+            foreach($filmcarts as $filmcart)
+                   $qety = $filmcart->quentity + $input_data['quentity'];
+                   $filmcart->update([
+                        'quentity' => $qety ,
+                   ]);
+
+                 } else{
+
             $filmcart = Filmcart::create([
                 'product_name' => $input_data['product_name'],
                 'quentity' => $input_data['quentity'],
                 'price' => $input_data['price'],
                 'subtotal' => $subtotal ,
-                'cart_id' => $input_data['cart_id'],
+                'cart_id' => $id,
             ]);
-            $cart = Cart::find($id);
-            $filmcart->cart()->update([
-                'total' => $total,
+        }
+            $fineltotal = $filmcart->cart->total + $total ;
+            $filmcart->cart->update([
+                'total' => $fineltotal,
             ]);
+
 
             $code = 200 ;
             $msg = 'film cart add successuly';
             $data = $filmcart;
-        }
 
+    }
           $result = [
             'data'  =>  $data,
             'code'  =>  $code,
@@ -151,22 +173,70 @@ class Admin_FilmService {
 
     }
 
+    public function get_cart($id){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+        // $user = User::find($id);
+         $carts = Cart::where('user_id','like',"%$id%")->get();
+       if(is_null($carts)){
+            $code = 400;
+            $msg = 'you do not have cart you should add a new one by add cart function';
+         }else{
+            foreach($carts as $cart){
+            if($cart->status != 'active'){
+                $cart->status = 'active';
+            }
+            $msg = 'cart is already exist for user';
+            $code = 200 ;
+            $data = $cart;
+         }
+        }
+
+        $result = [
+        'code' => $code,
+        'msg' => $msg,
+        'data' => $data,
+
+    ];
+    return $result;
+
+    }
+
     public function delete_item($input_data){
          $result = [];
         $code = 0;
         $msg = '';
         $data = [];
+        $name = $input_data['product_name'];
+        $id = $input_data['cart_id'];
+        $total = 0;
+        $fineltotal = 0;
 
-        $filmcart = Filmcart::where('product_name','like',$input_data['product_name'])->get();
-         if(is_null($filmcart)){
+        $cart = Cart::find($id);
+
+        $filmcarts = Filmcart::where('product_name','like',"%$name%")
+        ->where('cart_id','like',"%$id%")
+        ->get();
+        if(is_null($filmcarts)){
         $code = 400;
         $msg = 'film  cart is not exist';
-     }else{
-      $filmcart->delete();
+        }else{
 
-       $code = 200;
-       $msg = 'film deleted';
-       $data = [];
+        foreach($filmcarts as $filmcart){
+            $total += $filmcart->price * $filmcart->quentity ;
+            $filmcart->delete();
+        }
+        $fineltotal = $filmcart->cart->total - $total ;
+        $filmcart->cart->update([
+                'total' => $fineltotal,
+            ]);
+
+        $code = 200;
+        $msg = 'film deleted';
+        $data = $filmcarts;
      }
 
      $result = [

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Filmcart extends Model
 {
     use HasFactory;
-     protected $fillable = [
+
+    protected $fillable = [
         'product_name',
         'quentity',
         'price',

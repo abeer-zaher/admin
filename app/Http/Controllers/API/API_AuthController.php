@@ -21,7 +21,7 @@ class API_AuthController extends API_BaseController
         $response = $this->auth_service->register_user($request->all());
         $response_data = $response['data'];
         if($response['code'] == 200){
-            return $this->sendResponse( userDataResource::collection($response['data']) , $response['msg'],$response['code']);
+            return $this->sendResponse(new userDataResource($response['data']) , $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
     }
@@ -31,11 +31,10 @@ class API_AuthController extends API_BaseController
         $response = $this->auth_service->login_user($request->all());
         $response_data = $response['data'];
         if($response['code'] == 200){
-            return $this->sendResponse( userDataResource::collection($response['data']), $response['msg'],$response['code']);
+            return $this->sendResponse(new userDataResource($response['data']), $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
 
     }
-
 
 }

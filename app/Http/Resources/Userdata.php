@@ -19,7 +19,6 @@ class Userdata extends JsonResource
             'user_id'=> $this->id,
             'name' => $this->name,
             'email' => $this->email,
-
         ];
     }
 }

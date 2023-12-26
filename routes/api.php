@@ -36,8 +36,9 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/film/store','api_store')->name('api.films.store');
     Route::post('/film/update','api_update')->name('api.films.update');
     Route::post('/film/destroy','api_destroy')->name('api.films.destroy');
-    Route::get('/film/show/{id}','show_films')->name('api.films.show');
-    Route::post('/film/addtofilmcart','add_to_filmcart')->name('api.films.addtofilmcart');
+    Route::get('/film/show','show_films')->name('api.films.show');
+    Route::get('film/getcart/{id}','getcart')->name('api.films.getcart');
+    Route::post('/film/addtofilmcart/{id}','add_to_filmcart')->name('api.films.addtofilmcart');
     Route::post('/film/addcart/{id}','add_cart')->name('api.films.addcart');
     Route::post('/film/deleteitem','delete_filmcart')->name('api.films.deletefilmcart');
     Route::post('film/checkout/{id}','checkout')->name('api.films.checkout');

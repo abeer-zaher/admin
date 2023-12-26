@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('film_cart', function (Blueprint $table) {
+        Schema::create('filmcarts', function (Blueprint $table) {
             $table->id();
-             $table->string('product_name');
+            $table->string('product_name');
             $table->Integer('quentity');
             $table->float('price');
             $table->float('subtotal');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('film_cart');
+        Schema::dropIfExists('filmcarts');
     }
 };

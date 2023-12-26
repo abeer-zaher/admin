@@ -24,6 +24,7 @@ class Film extends JsonResource
                 'prodcompany'=>$this->prodcompany,
                 'cast'=>$this->cast,
                 'photo'=>$this->photo,
+                'price'=>$this->price,
 
             ];
 
