@@ -3,11 +3,13 @@
 namespace App\Services\Admin;
 
 use App\Services\Common\MediaService;
+
 use App\Models\User;
 use App\Models\Film;
 use App\Models\Gener;
 use App\Models\Image;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Filmcart;
 
 class Admin_FilmService {
@@ -122,6 +124,7 @@ class Admin_FilmService {
         $subtotal = 0;
         $fineltotal = 0;
         $qety = 0;
+        $bool = 0;
         $name = $input_data['product_name'];
 
         $cart = Cart::find($id);
@@ -134,34 +137,44 @@ class Admin_FilmService {
             $subtotal = $input_data['price'] * $input_data['quentity'];
             $total +=$input_data['price'] * $input_data['quentity'];
 
-            $filmcarts = $cart->film_cart()->where('product_name','like',"%$name%");
-            if(!is_null($filmcarts)){
-            foreach($filmcarts as $filmcart)
-                   $qety = $filmcart->quentity + $input_data['quentity'];
+            $filmcarts = $cart->film_cart;
+
+            foreach($filmcarts as $filmcart){
+            if($filmcart->product_name == $name){
+              $bool = 1;
+                $qety = $filmcart->quentity + $input_data['quentity'];
                    $filmcart->update([
                         'quentity' => $qety ,
                    ]);
+                    $data = $filmcart;
+             }
 
-                 } else{
+            }
 
-            $filmcart = Filmcart::create([
+                if($bool == 1){
+
+                    $fineltotal = $cart->total + $total ;
+                     $cart->update([
+                    'total' => $fineltotal,
+                   ]);
+
+                }else{
+
+            $film = Filmcart::create([
                 'product_name' => $input_data['product_name'],
                 'quentity' => $input_data['quentity'],
                 'price' => $input_data['price'],
                 'subtotal' => $subtotal ,
                 'cart_id' => $id,
             ]);
-        }
-            $fineltotal = $filmcart->cart->total + $total ;
-            $filmcart->cart->update([
+            $fineltotal = $cart->total + $total ;
+            $cart->update([
                 'total' => $fineltotal,
             ]);
-
-
+            $data = $film;
+        }
             $code = 200 ;
             $msg = 'film cart add successuly';
-            $data = $filmcart;
-
     }
           $result = [
             'data'  =>  $data,
@@ -172,7 +185,130 @@ class Admin_FilmService {
         return $result;
 
     }
+    public function add_order($input_data){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+        $total = 0 ;
+        $resolve = 0 ;
+        $products ='';
+        $id = $input_data['cart_id'];
 
+
+        $cart = Cart::find($id);
+        if(!is_null($cart)){
+          $filmcarts = $cart->film_cart;
+          foreach($filmcarts as $filmcart){
+            $products ='-'. $filmcart->product_name;
+        }
+        }
+
+        if(isset($input_data['resolve'])){
+            $total = $cart->total * $input_data['resolve']/100;
+        }else
+        $total = $cart->total;
+
+        $order = Order::create([
+            'user_id' => $input_data['user_id'],
+            'cart_id' => $input_data['cart_id'],
+            'total' => $total ,
+            'resolve' => $input_data['resolve'],
+            'status' => 'waiting for payment',
+            'dateorder' => now(),
+            'products'=> $products,
+        ]);
+        if(is_null($order)){
+            $code = 400;
+            $msg = 'can not create order';
+        }else {
+            $code = 200 ;
+            $msg = 'created';
+            $data = $order;
+        }
+         $result = [
+        'code' => $code,
+        'msg' => $msg,
+        'data' => $data,
+
+    ];
+    return $result;
+
+
+
+    }
+
+
+
+    public function cencel_order($id){
+         $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+        $orders = Order::where('user_id','like',"%$id%")->get();
+        if(is_null($orders)){
+            $code = 400;
+            $msg = 'there is no order';
+        }else{
+            foreach($orders as $order){
+             if($order->status = 'waiting for payment'){
+                $order->delete();
+                $code = 200;
+                 $msg = 'deleted';
+            }else{
+                $msg = 'you can not cencel this order' ;
+                $code = 400 ;
+            }
+            }
+
+        $data = $orders;
+        }
+
+        $result = [
+        'code' => $code,
+        'msg' => $msg,
+        'data' => $data,
+
+    ];
+    return $result;
+
+
+    }
+
+    public function payment($input_data){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+        $st = 'payment was made';
+        $id = $input_data['order_id'];
+
+        $orders = Order::find($id);
+        if(is_null($orders)){
+            $code = 400;
+            $msg = 'there is no order';
+        }else{
+        foreach($orders as $order){
+            $order->update([
+            'status' => $st,
+            ]);
+        }
+        $code = 200;
+        $msg = 'status was updated';
+        $data = $orders;
+        }
+         $result = [
+        'code' => $code,
+        'msg' => $msg,
+        'data' => $data,
+
+    ];
+    return $result;
+
+
+
+
+    }
     public function get_cart($id){
         $result = [];
         $code = 0;
@@ -206,7 +342,7 @@ class Admin_FilmService {
     }
 
     public function delete_item($input_data){
-         $result = [];
+        $result = [];
         $code = 0;
         $msg = '';
         $data = [];
@@ -214,6 +350,7 @@ class Admin_FilmService {
         $id = $input_data['cart_id'];
         $total = 0;
         $fineltotal = 0;
+        $qty = 0;
 
         $cart = Cart::find($id);
 
@@ -227,15 +364,28 @@ class Admin_FilmService {
 
         foreach($filmcarts as $filmcart){
             $total += $filmcart->price * $filmcart->quentity ;
-            $filmcart->delete();
-        }
-        $fineltotal = $filmcart->cart->total - $total ;
-        $filmcart->cart->update([
+            $qty = $filmcart->quentity - $input_data['quentity'];
+            $filmcart->update([
+                'quentity' =>$qty,
+            ]);
+            if($qty <= 0){
+                 $filmcart->delete();
+            }
+             $fineltotal = $filmcart->cart->total - $total ;
+             $cart->update([
                 'total' => $fineltotal,
             ]);
+            if(count($cart->film_cart) == 0){
+                 $cart->delete();
+            }
+        }
+
+
+
+
 
         $code = 200;
-        $msg = 'film deleted';
+        $msg = count($cart->film_cart);
         $data = $filmcarts;
      }
 

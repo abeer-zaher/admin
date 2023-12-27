@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Film as filmResource;
 use App\Http\Resources\Cart as cartResource;
 use App\Http\Resources\Filmcart as filmcartResource;
+use App\Http\Resources\Order as orderResource;
 use Illuminate\Http\Request;
 use App\Models\Film;
 use App\Models\Gener;
@@ -65,6 +66,32 @@ class API_FilmController extends API_BaseController
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
 
+    }
+    public function cencel_order($id){
+         $response = $this->film_service->cencel_order($id);
+        $response_data = $response['data'];
+         if ($response['code'] == 200) {
+            return $this->sendResponse( [], $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+
+    }
+    public function add_order(Request $request){
+         $response = $this->film_service->add_order($request->all());
+        $response_data = $response['data'];
+         if ($response['code'] == 200) {
+            return $this->sendResponse(new orderResource($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+
+    }
+    public function payment(Request $request){
+         $response = $this->film_service->payment($request->all());
+        $response_data = $response['data'];
+         if ($response['code'] == 200) {
+            return $this->sendResponse(new orderResource($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
     }
 
     public function add_cart($id){

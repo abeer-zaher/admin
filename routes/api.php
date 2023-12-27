@@ -42,10 +42,10 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/film/addcart/{id}','add_cart')->name('api.films.addcart');
     Route::post('/film/deleteitem','delete_filmcart')->name('api.films.deletefilmcart');
     Route::post('film/checkout/{id}','checkout')->name('api.films.checkout');
+    Route::post('/film/cencelorder/{id}','cencel_order')->name('api.films.cencelorder');
+    Route::post('/film/addorder','add_order')->name('api.films.addorder');
+    Route::post('/film/payment','payment')->name('api.films.payment');
 
 });
 });
 //});
-
-
-

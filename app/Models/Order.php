@@ -10,15 +10,22 @@ class Order extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        'product_name',
-        'quentity',
-        'price',
-        'subtotal',
-        'total'
+        'cart_id',
+        'total',
+        'resolve',
+        'status',
+        'dateorder',
+        'products'
 
     ];
     public function user(){
 
             return $this->belongsTo(User::class, 'user_id', 'id');
         }
+
+    public function cart(){
+         return $this->belongsTo(Cart::class, 'cart_id', 'id');
+
+    }
+
     }
