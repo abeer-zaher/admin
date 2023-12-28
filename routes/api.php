@@ -45,6 +45,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/film/cencelorder/{id}','cencel_order')->name('api.films.cencelorder');
     Route::post('/film/addorder','add_order')->name('api.films.addorder');
     Route::post('/film/payment','payment')->name('api.films.payment');
+    Route::post('/film/converttoprogress','convertToProgress')->name('api.films.convertprogress');
+    Route::post('/film/finishorders','finish_orders')->name('api.films.finishorders');
 
 });
 });

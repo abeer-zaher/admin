@@ -251,10 +251,12 @@ class Admin_FilmService {
             $msg = 'there is no order';
         }else{
             foreach($orders as $order){
-             if($order->status = 'waiting for payment'){
-                $order->delete();
+             if($order->status == 'waiting for payment'){
+                $order->update([
+                    'status' => 'canceled',
+                ]);
                 $code = 200;
-                 $msg = 'deleted';
+                 $msg = 'cenceled';
             }else{
                 $msg = 'you can not cencel this order' ;
                 $code = 400 ;
@@ -275,40 +277,106 @@ class Admin_FilmService {
 
     }
 
+    public function convert_to_inProgress($input_data){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+
+        $id = $input_data['order_id'];
+        $order = Order::find($id);
+        if(is_null($order)){
+            $code = 400;
+            $msg = 'this order is not exist';
+        }else {
+            if($order->status == 'payment was made'){
+            $order->update([
+                'status' => 'underway',
+            ]);
+            $code = 200 ;
+            $msg = 'the order is in progress';
+
+          }else
+            $msg = 'this order has another status';
+
+            $data = $order ;
+
+        }
+        $result = [
+            'code' => $code,
+            'msg' => $msg,
+            'data' => $data,
+        ];
+        return $result;
+    }
+
     public function payment($input_data){
         $result = [];
         $code = 0;
         $msg = '';
         $data = [];
-        $st = 'payment was made';
-        $id = $input_data['order_id'];
 
-        $orders = Order::find($id);
+        $id = $input_data['user_id'];
+
+        $orders = Order::where('user_id','like',"%$id%")->get();
         if(is_null($orders)){
             $code = 400;
             $msg = 'there is no order';
         }else{
-        foreach($orders as $order){
-            $order->update([
-            'status' => $st,
-            ]);
+            foreach($orders as $order){
+                if($order->status == 'waiting for payment'){
+                 $order->update([
+                    'status' => 'payment was made',
+                 ]);
+                 $msg = 'status was update';
+                }
+                }
+                $code = 200;
+                $msg = 'status does not change';
+                $data = $order;
+                    }
+            $result = [
+            'code' => $code,
+            'msg' => $msg,
+            'data' => $data,
+
+        ];
+        return $result;
+
+    }
+    public function finished(){
+        $result = [];
+        $code = 0;
+        $msg = '';
+        $data = [];
+        $str = 'underway';
+
+        //$id = $input_data['user_id'];
+
+        $orders = Order::where('status','like',"%$str%")->get();
+
+        if(is_null($orders)){
+            $code = 400 ;
+            $msg = 'there is no order';
+        }else {
+            foreach($orders as $order){
+                $order->update([
+                   'status' => 'finished',
+                ]);
+            }
+            $code = 200;
+            $msg = 'orders are finished';
+            $data = $orders;
         }
-        $code = 200;
-        $msg = 'status was updated';
-        $data = $orders;
-        }
-         $result = [
+        $result =[
         'code' => $code,
         'msg' => $msg,
         'data' => $data,
-
-    ];
-    return $result;
-
-
-
+        ];
+        return $result;
 
     }
+
     public function get_cart($id){
         $result = [];
         $code = 0;

@@ -86,14 +86,30 @@ class API_FilmController extends API_BaseController
 
     }
     public function payment(Request $request){
-         $response = $this->film_service->payment($request->all());
+        $response = $this->film_service->payment($request->all());
         $response_data = $response['data'];
          if ($response['code'] == 200) {
             return $this->sendResponse(new orderResource($response['data']) , $response['msg'],$response['code']);
         }else
         return $this->sendResponse( [] , $response['msg'],$response['code']);
     }
+    public function finish_orders(){
+        $response = $this->film_service->finished();
+        $response_data = $response['data'];
+         if ($response['code'] == 200) {
+            return $this->sendResponse( orderResource::collection($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
 
+    }
+    public function convertToProgress(Request $request){
+        $response = $this->film_service->convert_to_inProgress($request->all());
+        $response_data =$response['data'];
+        if($response['code'] == 200) {
+            return $this->sendResponse(new orderResource($response['data']) , $response['msg'],$response['code']);
+        }else
+        return $this->sendResponse( [] , $response['msg'],$response['code']);
+    }
     public function add_cart($id){
          $response = $this->film_service->add_cart($id);
         $response_data = $response['data'];
